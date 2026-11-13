@@ -1,24 +1,31 @@
 ---
-import { Image } from 'astro:assets';
-import HeroDex from '../HeroDex';
-import HeroDemo from '../HeroDemo';
-import { entries } from './entries';
+// Hero C, Centre stage: the headline split around one upright phone whose screens turn over
+import { getImage } from 'astro:assets';
+import PhoneCycle from '../PhoneCycle';
+import Tagline from '../Tagline';
 import { APP } from '../../lib/site';
 import game from '../../assets/shots/game.png';
+import dex from '../../assets/shots/dex.png';
+import activity from '../../assets/shots/activity.png';
+const web = async (img: ImageMetadata) => (await getImage({ src: img, width: 660, format: 'webp' })).src;
+const screens = [
+    { src: await web(game), alt: "A game's dex record in Cheevodex: ring, index lines and progression path", name: 'Record' },
+    { src: await web(dex), alt: 'The Dex in Cheevodex: numbered entries with counts and state', name: 'Dex' },
+    { src: await web(activity), alt: "Activity in Cheevodex: the dexes that moved, then the day's runs", name: 'Activity' },
+];
 ---
-<!-- Hero C, Centre stage: one upright phone in the middle, the headline split around it -->
 <section class="hero hv-c">
     <div class="wrap">
         <div class="hv-c-stage">
-            <h1><span class="hv-c-l">Every<br> unlock,</span><span class="hv-c-r">in your<br> own dex.</span></h1>
-            <Image class="hv-c-phone" src={game} alt="A game's dex record in Cheevodex on a phone: ring, index lines and progression path" widths={[390, 780]} sizes="(max-width: 700px) 64vw, 330px" loading="eager" fetchpriority="high" />
+            <Tagline client:load split />
+            <PhoneCycle client:visible screens={screens} />
         </div>
         <div class="hv-c-foot">
             <p class="lede">Cheevodex turns your RetroAchievements account into a dex: every game you have played, numbered, ringed and ready on your phone.</p>
             <div class="cta">
-                    <a class="btn btn-primary" href={APP}>Open Cheevodex</a>
-                    <a class="btn btn-ghost" href="#setup">How to connect</a>
-                </div>
+                <a class="btn btn-primary" href={APP}>Open Cheevodex</a>
+                <a class="btn btn-ghost" href="#setup">How to connect</a>
+            </div>
         </div>
     </div>
 </section>

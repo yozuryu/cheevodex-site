@@ -10,7 +10,9 @@ const STATE = {
     mastered: { label: 'Mastered', color: 'var(--gold)' },
 };
 
-export default function HeroDemo({ entries }: { entries: Entry[] }) {
+const Art = ({ e }: { e: Entry }) => e.icon ? <img src={e.icon} alt="" width="48" height="48" /> : <Mono title={e.title} />;
+
+export default function HeroDemo({ entries, mark }: { entries: Entry[]; mark: string }) {
     const [cur, setCur] = useState(0);
     const [fill, setFill] = useState(true);
     const e = entries[cur];
@@ -24,7 +26,13 @@ export default function HeroDemo({ entries }: { entries: Entry[] }) {
     }, [cur]);
     const path = e.path;
     return (
-        <div className="demo">
+        <div className="demo-app">
+          <div className="demo-bar" aria-hidden="true">
+            <span className="demo-brand"><img src={mark} alt="" width="18" height="18" /><span>Cheevo<b>dex</b></span></span>
+            <span className="demo-tabs"><span className="on">Dex</span><span>Overview</span><span>Activity</span><span className="wide">Backlog</span></span>
+          </div>
+          <div className="demo-search" aria-hidden="true">Search the dex or a No.</div>
+          <div className="demo">
             <ul className="demo-list" role="listbox" aria-label="Dex entries" aria-activedescendant={`de-${e.no}`}>
                 {entries.map((x, k) => {
                     const s = STATE[x.state];
@@ -39,7 +47,7 @@ export default function HeroDemo({ entries }: { entries: Entry[] }) {
                                 (ev.currentTarget.parentElement?.children[n] as HTMLElement | undefined)?.focus();
                             }}>
                             <span className="ring" style={{ ['--s' as string]: '44px', ['--w' as string]: '3.5px', ['--p' as string]: x.got / x.total * 100, ['--c' as string]: s.color }}>
-                                <Mono title={x.title} />
+                                <Art e={x} />
                             </span>
                             <span className="demo-id"><span className="dexno">No.{x.no}</span><b>{x.title}</b></span>
                             <span className="demo-n" style={{ color: s.color }}>{x.got}<small>/{x.total}</small></span>
@@ -52,8 +60,10 @@ export default function HeroDemo({ entries }: { entries: Entry[] }) {
                     <span className="dexno">Dex No.{e.no}</span>
                     <span style={{ color: st.color }}>{st.label}</span>
                 </div>
-                <b className="demo-title">{e.title}</b>
-                <span className="demo-console">{e.console}</span>
+                <div className="demo-id2">
+                    {e.icon && <img className="demo-icon" src={e.icon} alt="" width="56" height="56" />}
+                    <span><b className="demo-title">{e.title}</b><span className="demo-console">{e.console}</span></span>
+                </div>
                 <div className="demo-body">
                     <span className={`ring big ${e.state === 'mastered' && fill ? 'full' : ''}`} style={{ ['--p' as string]: fill ? pct : 0, ['--c' as string]: st.color }}>
                         <b style={{ color: st.color }}>{Math.floor(pct)}<small>%</small></b>
@@ -74,6 +84,7 @@ export default function HeroDemo({ entries }: { entries: Entry[] }) {
                     <b>{path[0]}<small>/{path[1]}</small></b>
                 </div>}
             </div>
+          </div>
         </div>
     );
 }

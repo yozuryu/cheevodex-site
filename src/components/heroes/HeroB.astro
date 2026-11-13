@@ -1,23 +1,22 @@
 ---
-import { Image } from 'astro:assets';
-import HeroDex from '../HeroDex';
+// Hero B, Try it: the turning tagline over a small working dex in an app frame
 import HeroDemo from '../HeroDemo';
+import Tagline from '../Tagline';
 import { entries } from './entries';
 import { APP } from '../../lib/site';
-import game from '../../assets/shots/game.png';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
-<!-- Hero B, Try it: the centred headline over a small working dex -->
 <section class="hero hv-b">
     <div class="wrap">
         <div class="hero-head">
-            <h1>Every unlock,<br> in your own dex.</h1>
+            <Tagline client:load />
             <p class="lede">Cheevodex turns your RetroAchievements account into a dex: every game you have played, numbered, ringed and ready on your phone.</p>
             <div class="cta">
-                    <a class="btn btn-primary" href={APP}>Open Cheevodex</a>
-                    <a class="btn btn-ghost" href="#setup">How to connect</a>
-                </div>
+                <a class="btn btn-primary" href={APP}>Open Cheevodex</a>
+                <a class="btn btn-ghost" href="#setup">How to connect</a>
+            </div>
         </div>
-        <HeroDemo client:visible entries={entries} />
+        <HeroDemo client:visible entries={entries} mark={base + 'assets/favicon.svg'} />
         <p class="hv-b-note">Four entries from the author's dex. Pick one.</p>
     </div>
 </section>

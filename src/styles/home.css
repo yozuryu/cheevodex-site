@@ -1,6 +1,6 @@
 /* Landing page. Paced like Playdate's (one idea per full-colour band, a short heading with a full stop, a line
    with some fun in it) and stocked like Backloggd's (the author's real games, set as a collection). The
-   compositions are the codex's own: the hero fans three real phone screens like a hand of cards, the record is
+   compositions are the codex's own: the hero is a working dex or one phone with its screens turning, the record is
    a manual page with its parts called out, the setup is a progression path. */
 
 /* ── Shared pieces ── */
@@ -57,28 +57,6 @@
 .lede { font-size: clamp(17px, 1.35vw, 20px); color: var(--ink-2); max-width: 48ch; }
 .cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
 .split-copy .cta, .setup-path .cta { justify-content: flex-start; }
-
-/* The fan: three real phone screens, spread once on load like a hand of cards, the dex entry in front */
-.fan { position: relative; height: clamp(520px, 52vw, 680px); max-width: 980px; margin: 0 auto; }
-.fan-card { position: absolute; left: 50%; top: 0; width: clamp(200px, 23vw, 300px); border-radius: 18px; outline: 1px solid rgb(232 229 223 / 0.14); outline-offset: -1px;
-            box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.9); transform-origin: 50% 120%; animation: fan-out 1100ms 200ms var(--ease) both; }
-.f-c { z-index: 2; width: clamp(220px, 25vw, 320px); --t: translateX(-50%) translateY(-10px); }
-.f-l { z-index: 1; --t: translateX(-50%) translateX(-78%) translateY(36px) rotate(-9deg); }
-.f-r { z-index: 1; --t: translateX(-50%) translateX(78%) translateY(36px) rotate(9deg); }
-.fan-card { transform: var(--t); }
-@keyframes fan-out { from { transform: translateX(-50%) translateY(40px) rotate(0); opacity: 0; } to { transform: var(--t); opacity: 1; } }
-.fan-entry { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; margin-inline: auto; width: min(440px, 100%); animation: settle 700ms 700ms var(--ease) both; }
-.fan::after { content: ''; position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 45%; background: linear-gradient(transparent, var(--page) 62%); pointer-events: none; }
-.hero-facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 40px; margin: 40px 0 0; text-align: center; }
-.hero-facts dt { color: var(--ink-3); font-size: 13px; }
-.hero-facts dd { margin: 4px 0 0; font: 600 20px/1.1 var(--mono); color: var(--ink); }
-@media (max-width: 700px) {
-    .fan { height: 560px; }
-    .fan-card { width: 38vw; } .f-c { width: 46vw; }
-    .f-l { --t: translateX(-50%) translateX(-54%) translateY(26px) rotate(-7deg); }
-    .f-r { --t: translateX(-50%) translateX(54%) translateY(26px) rotate(7deg); }
-}
-@media (prefers-reduced-motion: reduce) { .fan-card, .fan-entry { animation: none; } }
 
 /* The dex entry writing itself */
 .hdex { position: relative; width: 100%; display: flex; flex-direction: column; gap: 16px; padding: 20px 22px 16px;
@@ -264,20 +242,6 @@
 }
 
 /* ── Hero options (preview) ── */
-/* A, Poster: the RA-blue poster, a huge black headline, the live entry the only object */
-.hv-a { background: var(--accent); color: #07121e; padding-block: clamp(56px, 7vw, 104px); }
-.hv-a h1 { font-size: clamp(52px, 8.4vw, 124px); line-height: 0.9; max-width: 14ch; }
-.hv-a .hdex { color: var(--ink); }
-.hv-a-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; align-items: end; margin-top: clamp(28px, 3vw, 44px); }
-@media (min-width: 960px) { .hv-a-row { grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 64px; } }
-.hv-a .lede { color: #07121e; font-size: clamp(18px, 1.5vw, 22px); max-width: 36ch; }
-.hv-a-copy { display: flex; flex-direction: column; gap: 26px; }
-.hv-a .btn-primary { background: #07121e; color: var(--ink); }
-.hv-a .btn-primary:hover { background: #1b2a3a; color: var(--ink); }
-.hv-a .btn-ghost { background: transparent; border-color: rgb(7 18 30 / 0.45); color: #07121e; }
-.hv-a .btn-ghost:hover { border-color: #07121e; background: rgb(7 18 30 / 0.08); color: #07121e; }
-.hv-a .cta { justify-content: flex-start; }
-
 /* B, Try it: a working dex under the headline */
 .demo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; max-width: 980px; margin: 0 auto; padding: 16px; background: var(--box); border: 1px solid var(--line-2); border-radius: 10px; box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.85); }
 @media (min-width: 860px) { .demo { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 20px; } }
@@ -302,21 +266,59 @@
 .demo-body .ledger { flex: 1; }
 .hv-b-note { margin-top: 16px; text-align: center; color: var(--ink-3); font-size: 14px; }
 
-/* C, Centre stage: one upright phone, the headline split around it */
+/* C, Centre stage: one upright phone whose screens turn over, the headline split around it */
 .hv-c-stage { position: relative; display: flex; flex-direction: column; align-items: center; gap: 28px; }
-.hv-c h1 { font-size: clamp(46px, 7vw, 108px); line-height: 0.95; text-align: center; }
-.hv-c h1 span { display: block; }
-.hv-c-phone { width: min(330px, 64vw); border-radius: 22px; outline: 1px solid rgb(232 229 223 / 0.14); outline-offset: -1px; box-shadow: 0 50px 90px -30px rgb(0 0 0 / 0.9), 0 0 0 10px var(--box); }
+.hv-c h1 { font-size: clamp(46px, 7vw, 108px); line-height: 0.95; text-align: center; max-width: none; }
+.hv-c h1 > span { display: block; animation: settle 800ms var(--ease) both; }
+.pcycle { display: flex; flex-direction: column; align-items: center; gap: 18px; animation: settle 900ms 150ms var(--ease) both; }
+.pcycle-phone { position: relative; width: min(300px, 64vw); aspect-ratio: 390 / 844; border-radius: 24px; overflow: hidden; background: var(--box);
+                box-shadow: 0 0 0 10px var(--box), 0 0 0 11px var(--line-2), 0 50px 90px -30px rgb(0 0 0 / 0.9); }
+.pcycle-phone img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: translateY(14px) scale(0.985);
+                    transition: opacity 600ms var(--ease), transform 600ms var(--ease); }
+.pcycle-phone img.on { opacity: 1; transform: none; }
+.pcycle-dots { display: flex; gap: 6px; }
+.pcycle-dots button { min-height: 32px; padding: 0 12px; border: 1px solid var(--line-2); border-radius: 999px; background: none; color: var(--ink-3); font: 500 13px var(--body); cursor: pointer;
+                      transition: color 160ms var(--ease), border-color 160ms var(--ease), background-color 160ms var(--ease); }
+.pcycle-dots button.on { color: var(--ink); border-color: var(--accent); background: rgb(44 151 250 / 0.14); }
 .hv-c-foot { display: flex; flex-direction: column; align-items: center; gap: 22px; margin-top: 40px; text-align: center; }
+@keyframes from-left { from { opacity: 0; transform: translateX(-48px); } }
+@keyframes from-right { from { opacity: 0; transform: translateX(48px); } }
 @media (min-width: 960px) {
     .hv-c .wrap { position: relative; }
-    .hv-c-stage { min-height: 620px; justify-content: center; }
-    .hv-c-phone { width: 300px; }
-    .hv-c h1 { max-width: none; position: absolute; inset: 0 0 auto; padding-top: 48px; display: flex; justify-content: space-between; text-align: left; font-size: clamp(48px, 4.8vw, 74px); overflow-wrap: normal; }
+    .hv-c-stage { min-height: 680px; justify-content: flex-start; }
+    .hv-c h1 { position: absolute; inset: 0 0 auto; padding-top: 48px; display: flex; justify-content: space-between; text-align: left; font-size: clamp(48px, 4.8vw, 74px); overflow-wrap: normal; }
     .hv-c h1 .hv-c-l, .hv-c h1 .hv-c-r { width: calc(50% - 190px); }
-    .hv-c h1 .hv-c-l { text-align: right; }
-    .hv-c h1 .hv-c-r { text-align: left; }
-    .hv-c-foot { position: absolute; left: 32px; right: calc(50% + 206px); bottom: 24px; margin: 0; align-items: flex-end; text-align: right; }
+    .hv-c h1 .hv-c-l { text-align: right; animation: from-left 900ms 100ms var(--ease) both; }
+    .hv-c h1 .hv-c-r { text-align: left; animation: from-right 900ms 250ms var(--ease) both; }
+    .hv-c-foot { position: absolute; left: 32px; right: calc(50% + 206px); bottom: 110px; margin: 0; align-items: flex-end; text-align: right; }
     .hv-c-foot .lede { font-size: 17px; }
     .hv-c-foot .cta { justify-content: flex-end; }
 }
+
+/* The turning word, and the blue dex */
+.t-dex { color: var(--accent); }
+.tw { display: inline-grid; vertical-align: top; }
+.tw { justify-items: start; }
+.tw > span { grid-area: 1 / 1; opacity: 0; transform: translateY(-0.28em); transition: opacity 160ms var(--ease), transform 160ms var(--ease); }
+.tw > span.on { opacity: 1; transform: none; transition: opacity 320ms 180ms var(--ease), transform 320ms 180ms var(--ease); }
+.hv-c-l .tw { justify-items: end; }
+
+/* B: the app frame around the working dex */
+.demo-app { max-width: 980px; margin: 0 auto; background: var(--box); border: 1px solid var(--line-2); border-radius: 12px; overflow: hidden; box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.85); }
+.demo-app .demo { background: none; border: 0; box-shadow: none; border-radius: 0; }
+.demo-bar { display: flex; align-items: center; gap: 24px; padding: 12px 18px; background: var(--bar); border-bottom: 1px solid var(--line); }
+.demo-brand { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; }
+.demo-brand img { image-rendering: pixelated; }
+.demo-brand b { color: var(--accent); }
+.demo-tabs { display: flex; gap: 18px; font-size: 13px; color: var(--ink-3); }
+.demo-tabs .on { color: var(--accent-hi); box-shadow: 0 2px 0 var(--accent); padding-bottom: 3px; }
+@media (max-width: 560px) { .demo-tabs .wide { display: none; } .demo-bar { gap: 14px; } }
+.demo-search { margin: 14px 16px 0; padding: 10px 14px; border: 1px solid var(--line); border-radius: 4px; background: var(--well); color: var(--ink-3); font-size: 14px; }
+.demo-row .ring > img { position: relative; width: calc(100% - var(--w, 6px) * 2 - 6px); aspect-ratio: 1; border-radius: 50%; object-fit: cover; image-rendering: pixelated; }
+.demo-id2 { display: flex; gap: 14px; align-items: center; }
+.demo-id2 > span { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.demo-icon { width: 56px; height: 56px; border-radius: 4px; image-rendering: pixelated; flex-shrink: 0; }
+
+/* The two live options, marked */
+.opt-label { display: flex; gap: 12px; align-items: center; padding: 10px max(20px, calc((100% - 1116px) / 2)); background: var(--gold); color: #1c1302; font-size: 14px; }
+.opt-label span { font: 600 16px var(--display); }

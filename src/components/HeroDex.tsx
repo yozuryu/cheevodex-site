@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import Mono from './Mono';
 
 export type Entry = {
-    no: number; title: string; console: string;
+    no: number; title: string; console: string; icon?: string;
     got: number; total: number; state: 'played' | 'beaten' | 'mastered';
     path?: [number, number];
 };

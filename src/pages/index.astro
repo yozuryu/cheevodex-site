@@ -1,13 +1,13 @@
 ---
 import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import HeroDex, { type Entry } from '../components/HeroDex';
+import HeroB from '../components/heroes/HeroB.astro';
+import HeroC from '../components/heroes/HeroC.astro';
 import Contents, { type Part } from '../components/Contents';
 import DexRecord from '../components/DexRecord';
 import MovedRow from '../components/MovedRow';
 import FriendColor from '../components/FriendColor';
 import { APP, REPO, RA, RA_KEYS } from '../lib/site';
-import consoles from '../lib/consoles.json';
 import '../styles/home.css';
 
 import dDex from '../assets/shots/d-dex.png';
@@ -24,12 +24,6 @@ import login from '../assets/shots/login.png';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
 
-const entries: Entry[] = [
-    { no: 16244, title: 'Final Fantasy Crystal Chronicles: Ring of Fates', console: 'Nintendo DS', got: 9, total: 76, state: 'played', path: [7, 22] },
-    { no: 11306, title: 'Tomba! 2: The Evil Swine Return', console: 'PlayStation', got: 30, total: 45, state: 'beaten' },
-    { no: 2873, title: "Donald Duck: Goin' Quackers", console: 'PlayStation', got: 46, total: 65, state: 'beaten' },
-    { no: 16452, title: '7th Dragon 2020', console: 'PlayStation Portable', got: 80, total: 80, state: 'mastered' },
-];
 const moved = [
     { no: 16244, title: 'Final Fantasy Crystal Chronicles: Ring of Fates', console: 'Nintendo DS', before: 0, now: 9, total: 76 },
     { no: 45053, title: 'Poring Clicker', console: 'Standalone', before: 0, now: 61, total: 156 },
@@ -73,31 +67,11 @@ const jsonLd = [{
 <Base title="Cheevodex: a pocket companion for RetroAchievements" {description} {jsonLd}>
 <main id="main">
 
-    <!-- Hero: the headline across the top; under it three real phone screens fanned like a hand of cards, a dex entry writing itself in front -->
-    <section class="hero">
-        <div class="wrap">
-            <div class="hero-head">
-                <h1>Every unlock,<br> in your own dex.</h1>
-                <p class="lede">Cheevodex turns your RetroAchievements account into a dex: every game you have played, numbered, ringed and ready on your phone.</p>
-                <div class="cta">
-                    <a class="btn btn-primary" href={APP}>Open Cheevodex</a>
-                    <a class="btn btn-ghost" href="#setup">How to connect</a>
-                </div>
-            </div>
-            <div class="fan" aria-label="Cheevodex on a phone: the Dex, a game's dex record and Activity">
-                <Image class="fan-card f-l" src={dex} alt="The Dex on a phone: numbered entries with counts and state" widths={[390, 780]} sizes="(max-width: 700px) 46vw, 300px" loading="eager" />
-                <Image class="fan-card f-c" src={game} alt="A game's dex record on a phone: ring, index lines and progression path" widths={[390, 780]} sizes="(max-width: 700px) 50vw, 320px" loading="eager" fetchpriority="high" />
-                <Image class="fan-card f-r" src={activity} alt="Activity on a phone: the dexes that moved, then the day's runs" widths={[390, 780]} sizes="(max-width: 700px) 46vw, 300px" loading="eager" />
-                <div class="fan-entry"><HeroDex client:visible entries={entries} /></div>
-            </div>
-            <dl class="hero-facts">
-                <div><dt>Consoles</dt><dd>{consoles.length}</dd></div>
-                <div><dt>Price</dt><dd>Free</dd></div>
-                <div><dt>Licence</dt><dd>MIT</dd></div>
-                <div><dt>Sign-up</dt><dd>None</dd></div>
-            </dl>
-        </div>
-    </section>
+    <!-- Two hero options, live, to choose between; the one not picked goes -->
+    <div class="opt-label" id="option-b"><span>Hero option B</span> Try it: a working dex</div>
+    <HeroB />
+    <div class="opt-label" id="option-c"><span>Hero option C</span> Centre stage: one phone, the screens turning over</div>
+    <HeroC />
 
     <!-- The Dex: the heading at full size over the desktop screen, the counts set into it -->
     <section class="band b-blue" id="dex">
