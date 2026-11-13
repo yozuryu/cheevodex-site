@@ -141,29 +141,6 @@
 .record-path b { font: 600 15px var(--mono); color: var(--gold); white-space: nowrap; }
 .record-path b small { color: var(--ink-3); }
 
-/* The Friends: an instrument across the band */
-.fc { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 28px; background: var(--box); border: 1px solid var(--line-2); border-radius: 8px; }
-@media (min-width: 960px) { .fc { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 40px; padding: 40px; align-items: center; } }
-.fc label { display: block; margin-bottom: 10px; font-size: 14px; color: var(--ink-2); }
-.fc input { width: 100%; min-height: 64px; padding: 0 18px; border: 1px solid var(--line-2); border-radius: 4px; background: var(--well); color: var(--ink); font: 600 26px var(--display); }
-.fc input:focus-visible { outline: 2px solid var(--accent-hi); outline-offset: 0; }
-.fc-post { display: flex; align-items: flex-start; gap: 18px; padding: 22px; border-radius: 6px; background: var(--page); }
-.fc-av { width: 64px; height: 64px; flex-shrink: 0; display: grid; place-items: center; overflow: hidden; border-radius: 50%; font: 600 28px var(--display); color: var(--page); background: var(--fc); box-shadow: 0 0 0 3px var(--page), 0 0 0 5px var(--fc); transition: background-color 200ms; }
-.fc-av img { width: 100%; height: 100%; object-fit: cover; }
-.fc-body { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.fc-top { display: flex; align-items: baseline; gap: 10px; }
-.fc-top b { color: var(--fc); font: 600 24px/1.1 var(--display); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.fc-top time { color: var(--ink-3); font: 500 13px var(--mono); }
-.fc-run { display: flex; align-items: center; gap: 12px; padding: 10px 12px; background: var(--box); border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 4px; }
-.fc-run img { width: 40px; height: 40px; border-radius: 3px; flex-shrink: 0; image-rendering: pixelated; }
-.fc-game { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-.fc-game b { font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.fc-game small { color: var(--ink-3); font-size: 12px; }
-.fc-n { display: flex; flex-direction: column; align-items: flex-end; font: 600 17px/1.1 var(--mono); color: var(--gold); }
-.fc-n small { color: var(--ink-3); font-size: 11px; font-weight: 500; }
-.fc-note { grid-column: 1 / -1; font-size: 14px !important; color: var(--ink-3) !important; max-width: none !important; }
-.fc-note code { font: 500 13px var(--mono); color: var(--ink-2); }
-
 /* The Contents */
 .contents { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; }
 @media (min-width: 960px) { .contents { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 56px; align-items: start; } }
@@ -317,3 +294,63 @@
 .kl-wire::before, .kl-wire::after { content: ''; flex: 1; min-width: 16px; border-top: 2px dashed var(--accent); }
 .keyline figcaption { grid-column: 1 / -1; margin-top: 12px; color: #a9bccd; font-size: 15px; }
 .b-deep .setup-path li span, .b-deep p { color: #a9bccd; }
+
+/* The Record: the selector, the state on the card, the note */
+.rec-pick { display: flex; justify-content: center; gap: 8px; margin: -24px 0 40px; flex-wrap: wrap; }
+.rec-chip { min-height: 40px; padding: 0 18px; border: 1px solid var(--line-2); border-radius: 999px; background: var(--box); color: var(--ink-2); font: 600 14px var(--body); cursor: pointer;
+            transition: color 160ms var(--ease), border-color 160ms var(--ease), background-color 160ms var(--ease); }
+.rec-chip:hover { color: var(--ink); }
+.rec-chip.on.s-played { color: var(--ink); border-color: var(--accent); background: rgb(44 151 250 / 0.14); }
+.rec-chip.on.s-beaten { color: var(--ink); border-color: var(--silver); background: rgb(196 202 209 / 0.12); }
+.rec-chip.on.s-mastered { color: #1c1302; border-color: var(--gold); background: var(--gold); }
+.rec-chip:focus-visible { outline: 2px solid var(--accent-hi); outline-offset: 2px; }
+.record-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.record-top > b { font-size: 13px; }
+.record { animation: settle 380ms var(--ease) both; }
+.record.s-mastered { border-color: rgb(242 183 49 / 0.55); }
+.record.s-beaten { border-color: rgb(196 202 209 / 0.4); }
+.rec-note { margin-top: 28px; text-align: center; color: var(--ink-3); font-size: 14px; }
+
+/* The Friends: the copy beside a preview of the timeline */
+.friends { display: grid; grid-template-columns: minmax(0, 1fr); gap: 56px; align-items: start; }
+@media (min-width: 1000px) { .friends { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 64px; } }
+.friends-copy { display: flex; flex-direction: column; gap: 24px; }
+.friends-list { margin: 0; gap: 12px; }
+.friends-list .row { align-items: baseline; }
+.friends-list dt { color: var(--ink); font: 600 17px/1.2 var(--display); white-space: nowrap; }
+.friends-list dd { margin: 0; color: var(--ink-2); font-size: 15px; text-align: right; }
+.friends-list .row i { flex: 1; min-width: 16px; border-bottom: 1px dotted var(--line-2); transform: translateY(-4px); }
+@media (max-width: 560px) { .friends-list .row { flex-direction: column; gap: 2px; } .friends-list .row i { display: none; } .friends-list dd { text-align: left; } }
+
+.fp { padding: 20px; background: var(--box); border: 1px solid var(--line-2); border-radius: 10px; box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.85); }
+.fp-try { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.fp-try label { color: var(--ink-3); font-size: 13px; }
+.fp-try input { min-height: 46px; padding: 0 14px; border: 1px solid var(--line-2); border-radius: 4px; background: var(--well); color: var(--ink); font: 600 18px var(--display); }
+.fp-try input:focus-visible { outline: 2px solid var(--accent-hi); outline-offset: 0; }
+.fp-day { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 10px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
+.fp-day b { font-size: 15px; }
+.fp-day span { color: var(--ink-3); font-size: 13px; font-family: var(--mono); }
+.fp-rail { position: relative; display: flex; flex-direction: column; gap: 18px; padding-left: 4px; }
+.fp-rail::before { content: ''; position: absolute; left: 23px; top: 8px; bottom: 8px; width: 1px; background: var(--line-2); }
+.fp-post { position: relative; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; }
+.fp-av { position: relative; z-index: 1; width: 40px; height: 40px; display: grid; place-items: center; overflow: hidden; border-radius: 50%; background: var(--fc); color: var(--page);
+         font: 600 18px var(--display); box-shadow: 0 0 0 3px var(--box), 0 0 0 5px var(--fc); }
+.fp-av img { width: 100%; height: 100%; object-fit: cover; }
+.fp-main { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.fp-h { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+.fp-h b { color: var(--fc); font: 600 18px/1.2 var(--display); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fp-h time { color: var(--ink-3); font: 500 12px var(--mono); }
+.fp-h span { margin-left: auto; color: var(--ink-3); font-size: 12px; white-space: nowrap; }
+.fp-run { border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 4px; background: var(--page); overflow: hidden; }
+.fp-strip { display: flex; align-items: center; gap: 10px; padding: 8px 10px; background: linear-gradient(90deg, rgb(242 183 49 / 0.1), transparent 60%); }
+.fp-strip img { width: 36px; height: 36px; border-radius: 3px; flex-shrink: 0; image-rendering: pixelated; }
+.fp-game { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.fp-game b { font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fp-game small { color: var(--ink-3); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fp-n { display: flex; flex-direction: column; align-items: flex-end; font: 600 16px/1.1 var(--mono); color: var(--gold); }
+.fp-n small { color: var(--ink-3); font-size: 11px; font-weight: 500; }
+.fp-badges { display: flex; align-items: center; gap: 6px; padding: 8px 10px 10px; flex-wrap: wrap; }
+.fp-badges img { width: 34px; height: 34px; border-radius: 3px; box-shadow: 0 0 0 1px var(--line); border-bottom: 2px solid transparent; }
+.fp-badges img.hc { border-bottom-color: var(--gold); }
+.fp-first { flex: 1; min-width: 140px; margin-left: 4px; color: var(--ink-2); font-size: 13px; }
+.fp-note { margin-top: 16px; color: var(--ink-3); font-size: 13px; text-align: center; }

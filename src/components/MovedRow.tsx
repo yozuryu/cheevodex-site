@@ -17,7 +17,7 @@ export default function MovedRow({ rows }: { rows: Moved[] }) {
     }, []);
     return (
         <div className="moved" ref={ref}>
-            <div className="moved-h"><span>From the author's activity</span><b>{rows.reduce((s, r) => s + Math.round((r.now - r.before) * t), 0)} unlocks</b></div>
+            <div className="moved-h"><span>Last 14 days</span><b>{rows.reduce((s, r) => s + Math.round((r.now - r.before) * t), 0)} unlocks</b></div>
             {rows.map(r => {
                 const gained = Math.round((r.now - r.before) * t);
                 const pBefore = r.before / r.total * 100, pNow = (r.before + gained) / r.total * 100;

@@ -1,0 +1,110 @@
+{
+ "ys7": {
+  "no": 3160,
+  "title": "Ys Seven",
+  "console": "PlayStation Portable",
+  "icon": "ys7.png"
+ },
+ "kirby": {
+  "no": 14700,
+  "title": "Kirby: Squeak Squad",
+  "console": "Nintendo DS",
+  "icon": "kirby.png"
+ },
+ "oot": {
+  "no": 10113,
+  "title": "The Legend of Zelda: Ocarina of Time",
+  "console": "Nintendo 64",
+  "icon": "oot.png"
+ },
+ "trails": {
+  "no": 10479,
+  "title": "The Legend of Heroes: Trails in the Sky FC",
+  "console": "PlayStation Portable",
+  "icon": "trails.png"
+ },
+ "spm": {
+  "no": 187,
+  "title": "Super Paper Mario",
+  "console": "Wii",
+  "icon": "spm.png"
+ },
+ "tekken3": {
+  "no": 11259,
+  "title": "Tekken 3",
+  "console": "PlayStation",
+  "icon": "tekken3.png"
+ },
+ "windwaker": {
+  "no": 9190,
+  "title": "The Legend of Zelda: The Wind Waker",
+  "console": "GameCube",
+  "icon": "windwaker.png",
+  "unlocks": [
+   {
+    "title": "Anchors Aweigh",
+    "badge": "badges/482088.png",
+    "points": 5,
+    "hc": true
+   },
+   {
+    "title": "Hog Wild",
+    "badge": "badges/500803.png",
+    "points": 5,
+    "hc": true
+   },
+   {
+    "title": "Birthday Fine",
+    "badge": "badges/500801.png",
+    "points": 1,
+    "hc": true
+   }
+  ]
+ },
+ "fate": {
+  "no": 18159,
+  "title": "Fate/Extra",
+  "console": "PlayStation Portable",
+  "icon": "fate.png",
+  "unlocks": [
+   {
+    "title": "Those Archery Club Kids Don't Even Unstring Their Bows!",
+    "badge": "badges/433530.png",
+    "points": 3,
+    "hc": false
+   },
+   {
+    "title": "The Girl on the Rooftop",
+    "badge": "badges/433529.png",
+    "points": 3,
+    "hc": false
+   }
+  ]
+ },
+ "nfs2": {
+  "no": 2999,
+  "title": "Need for Speed: Hot Pursuit 2",
+  "console": "PlayStation 2",
+  "icon": "nfs2.png",
+  "unlocks": [
+   {
+    "title": "Championship Event 4",
+    "badge": "badges/467996.png",
+    "points": 3,
+    "hc": true
+   },
+   {
+    "title": "Championship Event 5",
+    "badge": "badges/467997.png",
+    "points": 3,
+    "hc": true
+   },
+   {
+    "title": "Championship Event 6",
+    "badge": "badges/467998.png",
+    "points": 3,
+    "hc": true
+   }
+  ]
+ }
+}
