@@ -1,6 +1,6 @@
 /* Landing page. Paced like Playdate's (one idea per full-colour band, a short heading with a full stop, a line
    with some fun in it) and stocked like Backloggd's (the author's real games, set as a collection). The
-   compositions are the codex's own: the hero is a dex page whose icons register as you arrive, the record is
+   compositions are the codex's own: the hero fans three real phone screens like a hand of cards, the record is
    a manual page with its parts called out, the setup is a progression path. */
 
 /* ── Shared pieces ── */
@@ -58,45 +58,27 @@
 .cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
 .split-copy .cta, .setup-path .cta { justify-content: flex-start; }
 
-.dexgrid { --cols: 14; --gap: 8px; display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: var(--gap); grid-auto-flow: dense; }
-.cell { --c: var(--accent); position: relative; aspect-ratio: 1; border-radius: 4px; overflow: hidden; display: grid; place-items: center;
-        background: var(--box); outline: 1px solid var(--line); outline-offset: -1px; transition: background-color 500ms var(--ease); }
-.cell.s-beaten { --c: var(--silver); } .cell.s-mastered { --c: var(--gold); background: rgb(242 183 49 / 0.08); }
-.cell.s-unstarted { --c: var(--line-2); }
-.cell-no { position: absolute; top: 7%; left: 9%; font: 8px/1 var(--pixel); color: var(--ink-3); letter-spacing: 0.04em; }
-.cell-ring { width: 52%; aspect-ratio: 1; border-radius: 50%; margin-top: 10%;
-             background: conic-gradient(var(--c) calc(var(--p) * 1%), rgb(232 229 223 / 0.09) 0);
-             -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px));
-                     mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px)); transition: filter 500ms var(--ease); }
-.cell.s-mastered .cell-ring { filter: drop-shadow(0 0 5px rgb(242 183 49 / 0.6)); }
-.cell.dim .cell-ring { filter: grayscale(1) brightness(0.5); }
-.cell.dim { background: var(--box); }
-.cell.reg::after { content: ''; position: absolute; inset: 0; border-radius: 4px; box-shadow: inset 0 0 0 2px var(--gold); opacity: 0; animation: register 900ms var(--ease) both; }
-@keyframes register { 15% { opacity: 1; } to { opacity: 0; } }
-/* The opened entry: six cells wide, four tall, in the middle of the collection */
-.cell-entry { position: relative; z-index: 1; grid-column: 5 / 11; grid-row: 2 / 6; display: flex; }
-.cell-entry > * { width: 100%; }
-.cell-entry .hdex { height: 100%; justify-content: space-between; box-shadow: 0 0 0 6px var(--page), 0 30px 70px -20px rgb(0 0 0 / 0.9); }
-/* Whole rows only: 6 rows of 14 less the entry's 24 cells; 8 of 8 less 24; 8 of 5 less 25 */
-.dexgrid > .cell:nth-of-type(n+61) { display: none; }
-.hero-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px 32px; margin-top: 20px; }
-.dexgrid-note { color: var(--ink-3); font-size: 14px; }
-.hero-facts { display: flex; gap: 32px; margin: 0; }
+/* The fan: three real phone screens, spread once on load like a hand of cards, the dex entry in front */
+.fan { position: relative; height: clamp(520px, 52vw, 680px); max-width: 980px; margin: 0 auto; }
+.fan-card { position: absolute; left: 50%; top: 0; width: clamp(200px, 23vw, 300px); border-radius: 18px; outline: 1px solid rgb(232 229 223 / 0.14); outline-offset: -1px;
+            box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.9); transform-origin: 50% 120%; animation: fan-out 1100ms 200ms var(--ease) both; }
+.f-c { z-index: 2; width: clamp(220px, 25vw, 320px); --t: translateX(-50%) translateY(-10px); }
+.f-l { z-index: 1; --t: translateX(-50%) translateX(-78%) translateY(36px) rotate(-9deg); }
+.f-r { z-index: 1; --t: translateX(-50%) translateX(78%) translateY(36px) rotate(9deg); }
+.fan-card { transform: var(--t); }
+@keyframes fan-out { from { transform: translateX(-50%) translateY(40px) rotate(0); opacity: 0; } to { transform: var(--t); opacity: 1; } }
+.fan-entry { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; margin-inline: auto; width: min(440px, 100%); animation: settle 700ms 700ms var(--ease) both; }
+.fan::after { content: ''; position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; height: 45%; background: linear-gradient(transparent, var(--page) 62%); pointer-events: none; }
+.hero-facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 40px; margin: 40px 0 0; text-align: center; }
 .hero-facts dt { color: var(--ink-3); font-size: 13px; }
-.hero-facts dd { margin: 2px 0 0; font: 600 22px/1.1 var(--mono); color: var(--ink); }
-@media (max-width: 1099px) {
-    .dexgrid { --cols: 8; }
-    .cell-entry { grid-column: 2 / 8; grid-row: 2 / 6; }
-    .dexgrid > .cell:nth-of-type(n+41) { display: none; }
-    .dexgrid > .cell:nth-of-type(-n+40) { display: block; }
+.hero-facts dd { margin: 4px 0 0; font: 600 20px/1.1 var(--mono); color: var(--ink); }
+@media (max-width: 700px) {
+    .fan { height: 560px; }
+    .fan-card { width: 38vw; } .f-c { width: 46vw; }
+    .f-l { --t: translateX(-50%) translateX(-54%) translateY(26px) rotate(-7deg); }
+    .f-r { --t: translateX(-50%) translateX(54%) translateY(26px) rotate(7deg); }
 }
-@media (max-width: 699px) {
-    .dexgrid { --cols: 5; --gap: 6px; }
-    .cell-entry { grid-column: 1 / 6; grid-row: 2 / 7; }
-    .cell-entry .hdex { box-shadow: 0 0 0 4px var(--page); }
-    .dexgrid > .cell:nth-of-type(n+16) { display: none; }
-    .dexgrid > .cell:nth-of-type(-n+15) { display: block; }
-}
+@media (prefers-reduced-motion: reduce) { .fan-card, .fan-entry { animation: none; } }
 
 /* The dex entry writing itself */
 .hdex { position: relative; width: 100%; display: flex; flex-direction: column; gap: 16px; padding: 20px 22px 16px;
@@ -279,5 +261,4 @@
 @media (prefers-reduced-motion: reduce) {
     .js .reveal { opacity: 1; transform: none; }
     .ring { transition: none; }
-    .cell.reg::after { animation: none; }
 }

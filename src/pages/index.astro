@@ -8,7 +8,6 @@ import MovedRow from '../components/MovedRow';
 import FriendColor from '../components/FriendColor';
 import { APP, REPO, RA, RA_KEYS } from '../lib/site';
 import consoles from '../lib/consoles.json';
-import dexData from '../lib/dex.json';
 import '../styles/home.css';
 
 import dDex from '../assets/shots/d-dex.png';
@@ -24,10 +23,6 @@ import login from '../assets/shots/login.png';
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
-// The hero is the author's dex drawn as Cheevodex art: one cell per game with its real dex number and a ring
-// at its real progress (blue in progress, silver beaten, gold mastered), registering one by one on load.
-// No game art outside the app screenshots.
-const dexCells = dexData as { no: number; pct: number; state: string }[];
 
 const entries: Entry[] = [
     { no: 16244, title: 'Final Fantasy Crystal Chronicles: Ring of Fates', console: 'Nintendo DS', got: 9, total: 76, state: 'played', path: [7, 22] },
@@ -78,7 +73,7 @@ const jsonLd = [{
 <Base title="Cheevodex: a pocket companion for RetroAchievements" {description} {jsonLd}>
 <main id="main">
 
-    <!-- Hero: the headline across the top, then the collection, with one entry opened in the middle of it -->
+    <!-- Hero: the headline across the top; under it three real phone screens fanned like a hand of cards, a dex entry writing itself in front -->
     <section class="hero">
         <div class="wrap">
             <div class="hero-head">
@@ -89,25 +84,18 @@ const jsonLd = [{
                     <a class="btn btn-ghost" href="#setup">How to connect</a>
                 </div>
             </div>
-            <div class="dexgrid" role="img" aria-label={`The author's dex of ${dexCells.length} games, each a dex number with a progress ring`}>
-                <div class="cell-entry">
-                    <HeroDex client:visible entries={entries} />
-                </div>
-                {dexCells.map((g, k) => (
-                    <span class={`cell s-${g.state}`} style={`--k:${(k * 37) % 61};--p:${g.pct}`}>
-                        <span class="cell-no">{g.no}</span>
-                        <i class="cell-ring"></i>
-                    </span>
-                ))}
+            <div class="fan" aria-label="Cheevodex on a phone: the Dex, a game's dex record and Activity">
+                <Image class="fan-card f-l" src={dex} alt="The Dex on a phone: numbered entries with counts and state" widths={[390, 780]} sizes="(max-width: 700px) 46vw, 300px" loading="eager" />
+                <Image class="fan-card f-c" src={game} alt="A game's dex record on a phone: ring, index lines and progression path" widths={[390, 780]} sizes="(max-width: 700px) 50vw, 320px" loading="eager" fetchpriority="high" />
+                <Image class="fan-card f-r" src={activity} alt="Activity on a phone: the dexes that moved, then the day's runs" widths={[390, 780]} sizes="(max-width: 700px) 46vw, 300px" loading="eager" />
+                <div class="fan-entry"><HeroDex client:visible entries={entries} /></div>
             </div>
-            <div class="hero-foot">
-                <p class="dexgrid-note">The author's dex: {dexCells.length} games by dex number, each ring at its real progress. One entry is open.</p>
-                <dl class="hero-facts">
-                    <div><dt>Consoles</dt><dd>{consoles.length}</dd></div>
-                    <div><dt>Price</dt><dd>Free</dd></div>
-                    <div><dt>Licence</dt><dd>MIT</dd></div>
-                </dl>
-            </div>
+            <dl class="hero-facts">
+                <div><dt>Consoles</dt><dd>{consoles.length}</dd></div>
+                <div><dt>Price</dt><dd>Free</dd></div>
+                <div><dt>Licence</dt><dd>MIT</dd></div>
+                <div><dt>Sign-up</dt><dd>None</dd></div>
+            </dl>
         </div>
     </section>
 
@@ -232,15 +220,4 @@ const jsonLd = [{
         </div>
     </section>
 </main>
-<script>
-    // Register every unlock: the dex cells light up from grey to their state colour one by one, once, with a gold flash.
-    // Without script, or with reduced motion, they are simply in colour.
-    const grid = document.querySelector('.dexgrid');
-    if (grid && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        const cells = [...grid.querySelectorAll<HTMLElement>('.cell')];
-        cells.forEach(c => c.classList.add('dim'));
-        const order = cells.map((c, k) => [Number(c.style.getPropertyValue('--k')) || k, c] as const).sort((a, b) => a[0] - b[0]);
-        order.forEach(([, c], k) => setTimeout(() => { c.classList.remove('dim'); c.classList.add('reg'); }, 350 + k * 28));
-    }
-</script>
 </Base>
