@@ -3,6 +3,8 @@
 import { getImage } from 'astro:assets';
 import PhoneCycle from '../PhoneCycle';
 import Tagline from '../Tagline';
+import HeroDex from '../HeroDex';
+import { entries } from './entries';
 import { APP } from '../../lib/site';
 import game from '../../assets/shots/game.png';
 import dex from '../../assets/shots/dex.png';
@@ -19,6 +21,7 @@ const screens = [
         <div class="hv-c-stage">
             <Tagline client:load split />
             <PhoneCycle client:visible screens={screens} />
+            <div class="hv-c-entry"><HeroDex client:visible entries={entries} /></div>
         </div>
         <div class="hv-c-foot">
             <p class="lede">Cheevodex turns your RetroAchievements account into a dex: every game you have played, numbered, ringed and ready on your phone.</p>

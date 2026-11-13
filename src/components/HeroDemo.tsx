@@ -15,6 +15,16 @@ const Art = ({ e }: { e: Entry }) => e.icon ? <img src={e.icon} alt="" width="48
 export default function HeroDemo({ entries, mark }: { entries: Entry[]; mark: string }) {
     const [cur, setCur] = useState(0);
     const [fill, setFill] = useState(true);
+    const [auto, setAuto] = useState(true);      // tours the entries until the visitor picks one
+    const [held, setHeld] = useState(false);
+    const [still, setStill] = useState(false);
+    useEffect(() => { setStill(matchMedia('(prefers-reduced-motion: reduce)').matches); }, []);
+    useEffect(() => {
+        if (!auto || held || still) return;
+        const t = window.setTimeout(() => setCur(n => (n + 1) % entries.length), 4000);
+        return () => clearTimeout(t);
+    }, [cur, auto, held, still, entries.length]);
+    const pick = (k: number) => { setAuto(false); setCur(k); };
     const e = entries[cur];
     const st = STATE[e.state];
     const pct = e.total ? e.got / e.total * 100 : 0;
@@ -26,7 +36,7 @@ export default function HeroDemo({ entries, mark }: { entries: Entry[]; mark: st
     }, [cur]);
     const path = e.path;
     return (
-        <div className="demo-app">
+        <div className={`demo-app ${auto && !still ? 'touring' : ''} ${held ? 'held' : ''}`} onPointerEnter={() => setHeld(true)} onPointerLeave={() => setHeld(false)}>
           <div className="demo-bar" aria-hidden="true">
             <span className="demo-brand"><img src={mark} alt="" width="18" height="18" /><span>Cheevo<b>dex</b></span></span>
             <span className="demo-tabs"><span className="on">Dex</span><span>Overview</span><span>Activity</span><span className="wide">Backlog</span></span>
@@ -38,12 +48,12 @@ export default function HeroDemo({ entries, mark }: { entries: Entry[]; mark: st
                     const s = STATE[x.state];
                     return (
                         <li key={x.no} id={`de-${x.no}`} role="option" aria-selected={k === cur} tabIndex={k === cur ? 0 : -1}
-                            className={`demo-row ${k === cur ? 'on' : ''}`} onClick={() => setCur(k)}
+                            className={`demo-row ${k === cur ? 'on' : ''}`} onClick={() => pick(k)}
                             onKeyDown={ev => {
                                 if (ev.key !== 'ArrowDown' && ev.key !== 'ArrowUp') return;
                                 ev.preventDefault();
                                 const n = (k + (ev.key === 'ArrowDown' ? 1 : entries.length - 1)) % entries.length;
-                                setCur(n);
+                                pick(n);
                                 (ev.currentTarget.parentElement?.children[n] as HTMLElement | undefined)?.focus();
                             }}>
                             <span className="ring" style={{ ['--s' as string]: '44px', ['--w' as string]: '3.5px', ['--p' as string]: x.got / x.total * 100, ['--c' as string]: s.color }}>

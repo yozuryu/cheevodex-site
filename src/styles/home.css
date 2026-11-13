@@ -322,3 +322,31 @@
 /* The two live options, marked */
 .opt-label { display: flex; gap: 12px; align-items: center; padding: 10px max(20px, calc((100% - 1116px) / 2)); background: var(--gold); color: #1c1302; font-size: 14px; }
 .opt-label span { font: 600 16px var(--display); }
+
+/* B touring: a timer line under the selected row while it tours, paused on hover */
+.demo-row { position: relative; }
+.demo-app.touring .demo-row.on::after { content: ''; position: absolute; left: 12px; right: 12px; bottom: 4px; height: 2px; border-radius: 2px; background: var(--accent);
+    transform-origin: left; animation: tour 4000ms linear both; }
+.demo-app.held .demo-row.on::after { animation-play-state: paused; }
+@keyframes tour { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* C: the countdown ring around the phone, and the entry beside it */
+.pcycle { position: relative; }
+.hv-c { overflow: clip; }
+.pcycle-ring { position: absolute; left: 50%; top: calc(min(300px, 64vw) * 2.164 / 2); width: min(440px, 94vw); aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; pointer-events: none;
+    background: conic-gradient(var(--accent) calc(var(--p) * 1%), rgb(232 229 223 / 0.06) 0);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
+    animation: countdown 3600ms linear both; }
+.pcycle-ring.held { animation-play-state: paused; }
+@keyframes countdown { from { --p: 0; } to { --p: 100; } }
+.pcycle-ring::after { content: ''; }
+.pcycle-phone, .pcycle-dots { position: relative; z-index: 1; }
+.hv-c-entry { display: none; }
+@media (min-width: 960px) {
+    .hv-c-entry { display: block; position: absolute; z-index: 2; right: 32px; left: calc(50% + 206px); bottom: 96px; animation: from-right 900ms 450ms var(--ease) both; }
+    .hv-c-entry .hdex { padding: 16px 18px 12px; gap: 12px; }
+    .hv-c-entry .hdex-main .ring { --s: 64px; --w: 5px; }
+    .hv-c-entry .hdex-title { font-size: 15px; }
+}
+.hdex-main .ring > img { position: relative; width: calc(100% - var(--w, 6px) * 2 - 8px); aspect-ratio: 1; border-radius: 50%; object-fit: cover; image-rendering: pixelated; }
+@media (prefers-reduced-motion: reduce) { .pcycle-ring { animation: none; --p: 100; } .demo-app.touring .demo-row.on::after { animation: none; } }

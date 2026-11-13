@@ -58,7 +58,7 @@ export default function HeroDex({ entries }: { entries: Entry[] }) {
             <div className="hdex-main" key={e.no}>
                 <span className={`ring ${e.state === 'mastered' && fill ? 'full' : ''}`}
                     style={{ ['--p' as string]: fill ? pct : 0, ['--c' as string]: st.color }}>
-                    <Mono title={e.title} />
+                    {e.icon ? <img src={e.icon} alt="" width="64" height="64" /> : <Mono title={e.title} />}
                 </span>
                 <div className="hdex-id">
                     <b className="hdex-title">{e.title}</b>
