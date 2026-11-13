@@ -80,29 +80,31 @@ const jsonLd = [{
 <Base title="Cheevodex: a pocket companion for RetroAchievements" {description} {jsonLd}>
 <main id="main">
 
-    <!-- Hero: the page is a dex. Icons register one by one; the headline and a dex entry hold blocks of cells -->
+    <!-- Hero: the headline across the top, then the collection, with one entry opened in the middle of it -->
     <section class="hero">
         <div class="wrap">
-            <div class="dexgrid">
-                <div class="cell-copy">
-                    <h1>Every unlock, in your own dex.</h1>
-                    <p class="lede">Cheevodex turns your RetroAchievements account into a dex: every game you have played, numbered, ringed and ready on your phone.</p>
-                    <div class="cta">
-                        <a class="btn btn-primary" href={APP}>Open Cheevodex</a>
-                        <a class="btn btn-ghost" href="#setup">How to connect</a>
-                    </div>
-                    <dl class="hero-facts">
-                        <div><dt>Consoles</dt><dd>{consoles.length}</dd></div>
-                        <div><dt>Price</dt><dd>Free</dd></div>
-                        <div><dt>Licence</dt><dd>MIT</dd></div>
-                    </dl>
+            <div class="hero-head">
+                <h1>Every unlock,<br> in your own dex.</h1>
+                <p class="lede">Cheevodex turns your RetroAchievements account into a dex: every game you have played, numbered, ringed and ready on your phone.</p>
+                <div class="cta">
+                    <a class="btn btn-primary" href={APP}>Open Cheevodex</a>
+                    <a class="btn btn-ghost" href="#setup">How to connect</a>
                 </div>
+            </div>
+            <div class="dexgrid">
                 <div class="cell-entry">
                     <HeroDex client:visible entries={entries} />
                 </div>
                 {dexIcons.map((src, k) => <span class="cell" style={`--k:${(k * 37) % 61}`}><img src={src} alt="" width="80" height="80" loading={k < 40 ? 'eager' : 'lazy'} /></span>)}
             </div>
-            <p class="dexgrid-note">Games from the author's dex of {dexIcons.length}, registering as you arrive.</p>
+            <div class="hero-foot">
+                <p class="dexgrid-note">Games from the author's dex of {dexIcons.length}, registering as you arrive. One entry is open.</p>
+                <dl class="hero-facts">
+                    <div><dt>Consoles</dt><dd>{consoles.length}</dd></div>
+                    <div><dt>Price</dt><dd>Free</dd></div>
+                    <div><dt>Licence</dt><dd>MIT</dd></div>
+                </dl>
+            </div>
         </div>
     </section>
 
