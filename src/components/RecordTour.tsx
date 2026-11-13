@@ -1,6 +1,6 @@
 // The Record, as a guided tour. A selector picks the kind of record (in progress, beaten, mastered); the tour
 // lights one part of the record at a time (ring, numbers, path, dex number), and hovering or tapping a callout
-// jumps to it. The games and icons are real RetroAchievements games; the numbers are examples, and say so.
+// jumps to it. The games and icons are real RetroAchievements games.
 import { useEffect, useRef, useState } from 'react';
 
 export type Rec = { state: 'played' | 'beaten' | 'mastered'; no: number; title: string; console: string; icon: string;
@@ -49,7 +49,7 @@ export default function RecordTour({ records }: { records: Rec[] }) {
     const st = STATES[r.state];
     const pct = r.got / r.total * 100;
     const live = on && fill;
-    const marks = Math.min(r.path[1], 20);
+    const marks = Math.min(r.path[1], 12);   // grouped past 12 so the count never gets squeezed on a phone
     const litMarks = Math.round(r.path[0] / r.path[1] * marks);
     const lit = (k: string) => (on && PARTS[cur].key === k ? 'lit' : '');
     const callout = (k: number) => (
@@ -104,7 +104,6 @@ export default function RecordTour({ records }: { records: Rec[] }) {
                 </div>
                 <ol className="callouts right" start={3}>{[2, 3].map(callout)}</ol>
             </div>
-            <p className="rec-note">Real games, example numbers.</p>
         </div>
     );
 }

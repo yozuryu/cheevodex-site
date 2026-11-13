@@ -1,5 +1,5 @@
 // "The dexes that moved", as Activity shows it: the ring holds what you had before the fortnight (dim) and
-// fills with what you gained (bright) while the +N counts up. Real numbers from the author's activity.
+// fills with what you gained (bright) while the +N counts up.
 import { useEffect, useRef, useState } from 'react';
 
 type Moved = { no: number; title: string; console: string; icon: string; before: number; now: number; total: number };

@@ -64,7 +64,8 @@ const parts: Part[] = [
 ];
 
 const description = 'Cheevodex is a free, open-source companion for RetroAchievements: every game you have played as a numbered dex entry, with completion rings, activity, friends and your backlog. Runs in your browser; your API key never leaves it.';
-const jsonLd = [{
+const faqLd = {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is RetroAchievements?", "acceptedAnswer": {"@type": "Answer", "text": "A free community that adds achievements, leaderboards and mastery to classic console and handheld games, played on emulators such as RetroArch. Cheevodex is a companion for an account there."}}, {"@type": "Question", "name": "Is Cheevodex official?", "acceptedAnswer": {"@type": "Answer", "text": "No. It is an independent, open-source app that reads RetroAchievements' public web API. It is not affiliated with RetroAchievements."}}, {"@type": "Question", "name": "Is my API key safe?", "acceptedAnswer": {"@type": "Answer", "text": "Your key is saved in your browser on your own device and sent only to RetroAchievements. Cheevodex has no server and no account of its own, and the code is on GitHub to check."}}, {"@type": "Question", "name": "What does it cost?", "acceptedAnswer": {"@type": "Answer", "text": "Nothing. It is free and open source under the MIT licence."}}, {"@type": "Question", "name": "Which consoles does it cover?", "acceptedAnswer": {"@type": "Answer", "text": "Every system RetroAchievements supports, from the Atari 2600 to the Wii."}}, {"@type": "Question", "name": "Can I see a friend's dex?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Open any RetroAchievements username in Cheevodex to read their dex, recent games and progress."}}, {"@type": "Question", "name": "Can I install it?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Open it in your browser and choose Install or Add to Home Screen. It opens full screen like an app, on phones and computers."}}]};
+const jsonLd = [faqLd, {
     '@type': 'WebApplication',
     name: 'Cheevodex',
     description,
@@ -100,7 +101,7 @@ const jsonLd = [{
                     <div><dt>Played</dt><dd>96</dd></div>
                     <div><dt>Beaten</dt><dd>8</dd></div>
                     <div><dt>Mastered</dt><dd>2</dd></div>
-                    <figcaption>The author's dex. Search by name or number, filter to what is not beaten yet, or sort by console.</figcaption>
+                    <figcaption>Search by name or number, filter to what is not beaten yet, or sort by console.</figcaption>
                 </dl>
             </figure>
         </div>
@@ -123,13 +124,9 @@ const jsonLd = [{
             <div class="recap-copy reveal">
                 <h2>The Recap.</h2>
                 <p class="big">Activity opens on the games you moved in the last 14 days: where they were, where they are now.</p>
-                <MovedRow client:visible rows={moved} />
-                <p class="caption">Real games, example numbers.</p>
                 <p>Then every run of unlocks, day by day, a year of streaks, and the heatmap. Mostly so you can see which game ate your fortnight.</p>
             </div>
-            <div class="recap-shot reveal">
-                <Image class="shot phone-shot" src={activity} alt="Activity on a phone: the games that moved in the last 14 days, then the day's runs" widths={[390, 780]} sizes="(max-width: 960px) 70vw, 340px" />
-            </div>
+            <div class="recap-card reveal"><MovedRow client:visible rows={moved} /></div>
         </div>
     </section>
 
@@ -152,11 +149,11 @@ const jsonLd = [{
     </section>
 
     <!-- The Contents: a contents page across the spread -->
-    <section class="band b-ink" id="contents">
+    <section class="band b-panel" id="contents">
         <div class="wrap">
             <div class="head-row reveal">
                 <h2>The Contents.</h2>
-                <p class="big">Six parts, one tap apart. Pick a line to turn to it.</p>
+                <p class="big">Six parts, one tap apart.</p>
             </div>
             <div class="reveal"><Contents client:visible parts={parts} /></div>
         </div>
@@ -184,11 +181,55 @@ const jsonLd = [{
         </div>
     </section>
 
+    <!-- Questions -->
+    <section class="band b-coal" id="faq">
+        <div class="wrap faq">
+            <div class="faq-head reveal">
+                <h2>The Questions.</h2>
+                <p class="big">The things people ask before they connect.</p>
+            </div>
+            <div class="faq-list reveal">
+                <details class="faq-item">
+                    <summary>What is RetroAchievements?</summary>
+                    <p>A free community that adds achievements, leaderboards and mastery to classic console and handheld games, played on emulators such as RetroArch. Cheevodex is a companion for an account there.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Is Cheevodex official?</summary>
+                    <p>No. It is an independent, open-source app that reads RetroAchievements' public web API. It is not affiliated with RetroAchievements.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Is my API key safe?</summary>
+                    <p>Your key is saved in your browser on your own device and sent only to RetroAchievements. Cheevodex has no server and no account of its own, and the code is on <a href={REPO}>GitHub</a> to check.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>What does it cost?</summary>
+                    <p>Nothing. It is free and open source under the MIT licence.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Which consoles does it cover?</summary>
+                    <p>Every system RetroAchievements supports, from the Atari 2600 to the Wii.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Can I see a friend's dex?</summary>
+                    <p>Yes. Open any RetroAchievements username in Cheevodex to read their dex, recent games and progress.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Can I install it?</summary>
+                    <p>Yes. Open it in your browser and choose Install or Add to Home Screen. It opens full screen like an app, on phones and computers.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
     <!-- The close -->
     <section class="close">
         <div class="wrap">
             <p class="close-line reveal">For everyone still chasing the last achievement in a game older than they are.</p>
-            <a class="btn btn-primary reveal" href={APP}>Open your dex</a>
+            <div class="close-cta reveal">
+                <a class="btn btn-primary" href={APP}>Open your dex</a>
+                <a class="btn btn-ghost" href={REPO}>Source on GitHub</a>
+            </div>
+            <p class="close-note reveal">Free and open source. See what changed lately in the <a href={APP + 'changelog/'}>changelog</a>.</p>
         </div>
     </section>
 </main>

@@ -1,6 +1,6 @@
 // The codex's contents page: every part of the app as an index line (name, dotted leader, what it holds).
 // Picking a line turns to that part: its real screens on the right. Without script, every part is listed
-// with its screens in order.
+// with its screens in order. On phones it is a swipeable row instead: each part's screen right under its name.
 import { useEffect, useRef, useState } from 'react';
 
 export type Part = {
@@ -21,7 +21,7 @@ export default function Contents({ parts }: { parts: Part[] }) {
     }, []);
     useEffect(() => {
         if (!auto || !seen) return;
-        const t = window.setTimeout(() => setCur(n => (n + 1) % parts.length), 4200);
+        const t = window.setTimeout(() => setCur(n => (n + 1) % parts.length), cur === 0 ? 7000 : 4200);   // a first look before it moves
         return () => clearTimeout(t);
     }, [cur, auto, seen, parts.length]);
     const pick = (k: number) => { setAuto(false); setCur(k); };
@@ -51,6 +51,15 @@ export default function Contents({ parts }: { parts: Part[] }) {
                     {p.phone && <img className="shot shot-p" src={p.phone.src} alt={p.phone.alt} width="390" height="844" loading="lazy" />}
                 </div>
             </div>
+            <ul className="contents-swipe" aria-label="Parts of Cheevodex">
+                {parts.map(x => (
+                    <li key={x.id}>
+                        <b>{x.name}</b>
+                        <span>{x.text}</span>
+                        {(x.phone || x.desk) && <img src={(x.phone || x.desk)!.src} alt={(x.phone || x.desk)!.alt} loading="lazy" className={x.phone ? 'is-phone' : 'is-desk'} />}
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 }

@@ -1,7 +1,7 @@
 // The Friends timeline in miniature: a day heading, then posts on a rail, one per friend, each with their runs
 // (game strip, +N and points, the badges they unlocked, the first unlock named). The first friend's name can be
-// typed over to see the colour Cheevodex would give it; the author's own name shows his avatar. Real games and
-// badges from RetroAchievements; the posts are examples.
+// typed over to see the colour Cheevodex would give it; the author's own name shows their avatar. Real games and
+// badges from RetroAchievements.
 import { useState } from 'react';
 import { friendColor } from './FriendColor';
 
@@ -53,7 +53,6 @@ export default function FriendsPreview({ posts, avatar }: { posts: Post[]; avata
                     );
                 })}
             </div>
-            <p className="fp-note">Real games and badges, example posts.</p>
         </div>
     );
 }

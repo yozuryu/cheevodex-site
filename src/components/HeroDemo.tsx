@@ -86,8 +86,8 @@ export default function HeroDemo({ entries, mark }: { entries: Entry[]; mark: st
                 {path && <div className="hdex-path">
                     <span>Progression</span>
                     <span className="dpath">
-                        {Array.from({ length: Math.min(path[1], 14) }, (_, k) => {
-                            const lit = k < Math.round(path[0] / path[1] * Math.min(path[1], 14));
+                        {Array.from({ length: Math.min(path[1], 12) }, (_, k) => {
+                            const lit = k < Math.round(path[0] / path[1] * Math.min(path[1], 12));
                             return <i key={k} className={fill && lit ? 'on' : ''} style={{ transitionDelay: `${200 + k * 60}ms` }} />;
                         })}
                     </span>
