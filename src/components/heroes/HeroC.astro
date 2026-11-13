@@ -1,0 +1,24 @@
+---
+import { Image } from 'astro:assets';
+import HeroDex from '../HeroDex';
+import HeroDemo from '../HeroDemo';
+import { entries } from './entries';
+import { APP } from '../../lib/site';
+import game from '../../assets/shots/game.png';
+---
+<!-- Hero C, Centre stage: one upright phone in the middle, the headline split around it -->
+<section class="hero hv-c">
+    <div class="wrap">
+        <div class="hv-c-stage">
+            <h1><span class="hv-c-l">Every<br> unlock,</span><span class="hv-c-r">in your<br> own dex.</span></h1>
+            <Image class="hv-c-phone" src={game} alt="A game's dex record in Cheevodex on a phone: ring, index lines and progression path" widths={[390, 780]} sizes="(max-width: 700px) 64vw, 330px" loading="eager" fetchpriority="high" />
+        </div>
+        <div class="hv-c-foot">
+            <p class="lede">Cheevodex turns your RetroAchievements account into a dex: every game you have played, numbered, ringed and ready on your phone.</p>
+            <div class="cta">
+                    <a class="btn btn-primary" href={APP}>Open Cheevodex</a>
+                    <a class="btn btn-ghost" href="#setup">How to connect</a>
+                </div>
+        </div>
+    </div>
+</section>

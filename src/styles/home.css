@@ -262,3 +262,61 @@
     .js .reveal { opacity: 1; transform: none; }
     .ring { transition: none; }
 }
+
+/* ── Hero options (preview) ── */
+/* A, Poster: the RA-blue poster, a huge black headline, the live entry the only object */
+.hv-a { background: var(--accent); color: #07121e; padding-block: clamp(56px, 7vw, 104px); }
+.hv-a h1 { font-size: clamp(52px, 8.4vw, 124px); line-height: 0.9; max-width: 14ch; }
+.hv-a .hdex { color: var(--ink); }
+.hv-a-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; align-items: end; margin-top: clamp(28px, 3vw, 44px); }
+@media (min-width: 960px) { .hv-a-row { grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 64px; } }
+.hv-a .lede { color: #07121e; font-size: clamp(18px, 1.5vw, 22px); max-width: 36ch; }
+.hv-a-copy { display: flex; flex-direction: column; gap: 26px; }
+.hv-a .btn-primary { background: #07121e; color: var(--ink); }
+.hv-a .btn-primary:hover { background: #1b2a3a; color: var(--ink); }
+.hv-a .btn-ghost { background: transparent; border-color: rgb(7 18 30 / 0.45); color: #07121e; }
+.hv-a .btn-ghost:hover { border-color: #07121e; background: rgb(7 18 30 / 0.08); color: #07121e; }
+.hv-a .cta { justify-content: flex-start; }
+
+/* B, Try it: a working dex under the headline */
+.demo { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; max-width: 980px; margin: 0 auto; padding: 16px; background: var(--box); border: 1px solid var(--line-2); border-radius: 10px; box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.85); }
+@media (min-width: 860px) { .demo { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 20px; } }
+.demo-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.demo-row { display: flex; align-items: center; gap: 14px; padding: 12px; border-radius: 6px; cursor: pointer; transition: background-color 160ms var(--ease); }
+.demo-row:hover { background: var(--box-hi); }
+.demo-row.on { background: var(--page); box-shadow: inset 3px 0 0 var(--accent); }
+.demo-row:focus-visible { outline: 2px solid var(--accent-hi); outline-offset: -2px; }
+.demo-row .mono { font-size: 15px; }
+.demo-id { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.demo-id b { font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.demo-id .dexno { font-size: 11px; }
+.demo-n { font: 600 15px var(--mono); white-space: nowrap; }
+.demo-n small { color: var(--ink-3); }
+.demo-rec { display: flex; flex-direction: column; gap: 10px; padding: 22px; background: var(--page); border: 1px solid var(--line-2); border-radius: 8px; animation: settle 380ms var(--ease) both; }
+.demo-rec.s-mastered { border-color: rgb(242 183 49 / 0.55); }
+.demo-rec-top { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; }
+.demo-title { font-size: 20px; line-height: 1.25; }
+.demo-console { color: var(--accent-hi); font-size: 14px; }
+.demo-body { display: flex; align-items: center; gap: 22px; margin: 8px 0; }
+.demo-body .ring.big { --s: 104px; --w: 8px; }
+.demo-body .ledger { flex: 1; }
+.hv-b-note { margin-top: 16px; text-align: center; color: var(--ink-3); font-size: 14px; }
+
+/* C, Centre stage: one upright phone, the headline split around it */
+.hv-c-stage { position: relative; display: flex; flex-direction: column; align-items: center; gap: 28px; }
+.hv-c h1 { font-size: clamp(46px, 7vw, 108px); line-height: 0.95; text-align: center; }
+.hv-c h1 span { display: block; }
+.hv-c-phone { width: min(330px, 64vw); border-radius: 22px; outline: 1px solid rgb(232 229 223 / 0.14); outline-offset: -1px; box-shadow: 0 50px 90px -30px rgb(0 0 0 / 0.9), 0 0 0 10px var(--box); }
+.hv-c-foot { display: flex; flex-direction: column; align-items: center; gap: 22px; margin-top: 40px; text-align: center; }
+@media (min-width: 960px) {
+    .hv-c .wrap { position: relative; }
+    .hv-c-stage { min-height: 620px; justify-content: center; }
+    .hv-c-phone { width: 300px; }
+    .hv-c h1 { max-width: none; position: absolute; inset: 0 0 auto; padding-top: 48px; display: flex; justify-content: space-between; text-align: left; font-size: clamp(48px, 4.8vw, 74px); overflow-wrap: normal; }
+    .hv-c h1 .hv-c-l, .hv-c h1 .hv-c-r { width: calc(50% - 190px); }
+    .hv-c h1 .hv-c-l { text-align: right; }
+    .hv-c h1 .hv-c-r { text-align: left; }
+    .hv-c-foot { position: absolute; left: 32px; right: calc(50% + 206px); bottom: 24px; margin: 0; align-items: flex-end; text-align: right; }
+    .hv-c-foot .lede { font-size: 17px; }
+    .hv-c-foot .cta { justify-content: flex-end; }
+}

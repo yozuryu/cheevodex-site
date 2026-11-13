@@ -1,0 +1,24 @@
+---
+import { Image } from 'astro:assets';
+import HeroDex from '../HeroDex';
+import HeroDemo from '../HeroDemo';
+import { entries } from './entries';
+import { APP } from '../../lib/site';
+import game from '../../assets/shots/game.png';
+---
+<!-- Hero A, Poster: a full RA-blue poster, a huge headline, the live dex entry the only object on it -->
+<section class="hero hv-a">
+    <div class="wrap">
+        <h1>Every unlock, in your own dex.</h1>
+        <div class="hv-a-row">
+            <div class="hv-a-copy">
+                <p class="lede">Cheevodex turns your RetroAchievements account into a dex: every game you have played, numbered, ringed and ready on your phone.</p>
+                <div class="cta">
+                    <a class="btn btn-primary" href={APP}>Open Cheevodex</a>
+                    <a class="btn btn-ghost" href="#setup">How to connect</a>
+                </div>
+            </div>
+            <div class="hv-a-entry"><HeroDex client:visible entries={entries} /></div>
+        </div>
+    </div>
+</section>
