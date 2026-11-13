@@ -1,6 +1,6 @@
 // The headline with its one moving part: the word after "Every" keeps turning over (unlock, mastery, badge,
-// streak), holding longest on "unlock". It pauses while hovered and while off-screen. All the words sit stacked
-// in one cell, so the line never changes width. Screen readers and search engines get the plain sentence;
+// streak), holding longest on "unlock". Each word arrives grey, like a locked achievement, then unlocks in gold.
+// It pauses while hovered and while off-screen. Only the current word is in the line, so centred lines stay centred. Screen readers and search engines get the plain sentence;
 // reduced motion keeps "unlock".
 import { useEffect, useRef, useState } from 'react';
 
@@ -22,9 +22,7 @@ export default function Tagline({ split = false }: { split?: boolean }) {
         return () => clearTimeout(t);
     }, [i, held, seen]);
     const word = (
-        <span className="tw" aria-hidden="true">
-            {WORDS.map(w => <span key={w} className={w === WORDS[i] ? 'on' : ''}>{w},</span>)}
-        </span>
+        <span className="tw" aria-hidden="true"><span key={i} className="tw-word">{WORDS[i]}</span>,</span>
     );
     const dex = <span className="t-dex">dex</span>;
     return (

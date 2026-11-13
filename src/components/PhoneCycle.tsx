@@ -16,7 +16,6 @@ export default function PhoneCycle({ screens }: { screens: Screen[] }) {
     return (
         <div className="pcycle" onPointerEnter={() => setHeld(true)} onPointerLeave={() => setHeld(false)}
             onFocus={() => setHeld(true)} onBlur={() => setHeld(false)}>
-            <span className={`pcycle-ring ${held ? 'held' : ''}`} key={i} aria-hidden="true" />
             <div className="pcycle-phone">
                 {screens.map((s, k) => (
                     <img key={s.src} src={s.src} alt={k === i ? s.alt : ''} aria-hidden={k !== i} width="390" height="844"
