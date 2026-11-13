@@ -6,9 +6,9 @@ The app itself lives in its own repo and runs at <https://yozuryu.github.io/chee
 
 ## Stack
 
-[Astro](https://astro.build) with React for the parts that move or respond (the hero's dex entry, the dex record, the moved rows, the friend-colour try-out and the contents switcher), static HTML everywhere else.
+[Astro](https://astro.build) with React for the parts that move or respond (the hero's working dex, the record tour, the recap rows, the friend-colour try-out and the contents tour), static HTML everywhere else.
 
-The page is paced like Playdate's (one idea per full-colour band, short headings with a full stop), opens on three real phone screens fanned like a hand of cards, and runs Analogue's ticker of the systems RetroAchievements covers; everything drawn is Cheevodex's own. The SEO head (canonical, Open Graph, Twitter card, JSON-LD) is in `src/layouts/Base.astro`; Astro writes the sitemap.
+The page is paced like Playdate's (one idea per full-colour band, short headings with a full stop), opens on a small working dex in an app frame, and runs Analogue's ticker of the systems RetroAchievements covers; everything drawn is Cheevodex's own. The SEO head (canonical, Open Graph, Twitter card, JSON-LD) is in `src/layouts/Base.astro`; Astro writes the sitemap.
 
 ```sh
 npm install
@@ -20,7 +20,7 @@ Pushing to `main` builds and deploys to GitHub Pages (`.github/workflows/deploy.
 
 ## Pictures
 
-The only game art and achievement badges on the site are inside real screenshots of the app (`src/assets/shots/`, captured at 2x, converted to WebP at build), showing what Cheevodex does. Everything drawn on the page is the site's own: the built pieces show a game's monogram instead of its icon. Badges and icons on RetroAchievements are made by its community and the games' publishers, so they are not used as decoration. `public/assets/og.jpg` is the 1200 x 630 share image, taken from the hero.
+Game icons, achievement badges and the author's avatar appear only inside previews of the app: real screenshots (`src/assets/shots/`, captured at 2x, converted to WebP at build), and the app pieces built on the page (`public/app-icons/`), showing what Cheevodex does. Badges and icons on RetroAchievements are made by its community and the games' publishers, so they are not used as decoration. `public/assets/og.jpg` is the 1200 x 630 share image, taken from the hero.
 
 ## Licence
 

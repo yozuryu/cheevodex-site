@@ -2,9 +2,8 @@
 import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import HeroB from '../components/heroes/HeroB.astro';
-import HeroC from '../components/heroes/HeroC.astro';
+import RecordTour from '../components/RecordTour';
 import Contents, { type Part } from '../components/Contents';
-import DexRecord from '../components/DexRecord';
 import MovedRow from '../components/MovedRow';
 import FriendColor from '../components/FriendColor';
 import { APP, REPO, RA, RA_KEYS } from '../lib/site';
@@ -19,14 +18,15 @@ import activity from '../assets/shots/activity.png';
 import backlog from '../assets/shots/backlog.png';
 import dStats from '../assets/shots/d-stats.png';
 import overview from '../assets/shots/overview.png';
-import login from '../assets/shots/login.png';
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+// Game icons and the author's avatar, shown only inside previews of the app
+const appIcon = (n: number | string) => base + 'app-icons/' + n + '.png';
 
 
 const moved = [
-    { no: 16244, title: 'Final Fantasy Crystal Chronicles: Ring of Fates', console: 'Nintendo DS', before: 0, now: 9, total: 76 },
-    { no: 45053, title: 'Poring Clicker', console: 'Standalone', before: 0, now: 61, total: 156 },
+    { no: 16244, title: 'Final Fantasy Crystal Chronicles: Ring of Fates', console: 'Nintendo DS', icon: appIcon(16244), before: 0, now: 9, total: 76 },
+    { no: 45053, title: 'Poring Clicker', console: 'Standalone', icon: appIcon(45053), before: 0, now: 61, total: 156 },
 ];
 
 const web = async (img: ImageMetadata, width: number) => (await getImage({ src: img, width, format: 'webp' })).src;
@@ -67,11 +67,7 @@ const jsonLd = [{
 <Base title="Cheevodex: a pocket companion for RetroAchievements" {description} {jsonLd}>
 <main id="main">
 
-    <!-- Two hero options, live, to choose between; the one not picked goes -->
-    <div class="opt-label" id="option-b"><span>Hero option B</span> Try it: a working dex</div>
     <HeroB />
-    <div class="opt-label" id="option-c"><span>Hero option C</span> Centre stage: one phone, the screens turning over</div>
-    <HeroC />
 
     <!-- The Dex: the heading at full size over the desktop screen, the counts set into it -->
     <section class="band b-blue" id="dex">
@@ -92,39 +88,28 @@ const jsonLd = [{
         </div>
     </section>
 
-    <!-- The Record: a manual page, the live record in the middle with its parts called out -->
+    <!-- The Record: a manual page that tours its own parts -->
     <section class="band b-coal" id="record">
         <div class="wrap">
             <div class="head-center reveal">
                 <h2>The Record.</h2>
                 <p class="big">Each game opens as a dex record. Here is how to read one.</p>
             </div>
-            <div class="manual reveal">
-                <ol class="callouts left">
-                    <li><b>The ring.</b> How far you are. It turns gold and glows when the game is mastered.</li>
-                    <li><b>The numbers.</b> Achievements, points and time played, as index lines.</li>
-                </ol>
-                <div class="manual-card"><DexRecord client:visible /></div>
-                <ol class="callouts right" start="3">
-                    <li><b>The path.</b> One diamond per progression achievement. Light them all and the game is beaten.</li>
-                    <li><b>The number.</b> Dex No.16244 is its RetroAchievements game ID.</li>
-                </ol>
-            </div>
+            <div class="reveal"><RecordTour client:visible icon={appIcon(16244)} /></div>
         </div>
     </section>
 
-    <!-- The Fortnight: the two-tone ring at poster size, the moved rows playing beside it -->
-    <section class="band b-gold" id="fortnight">
-        <div class="wrap fortnight">
-            <div class="poster-ring reveal" role="img" aria-label="A ring: the part you already had, dim, and the part you gained this fortnight, bright">
-                <span class="ring two big" style="--b:38;--p:62;--c:var(--accent)"></span>
-                <span class="pr-legend"><span class="dim"><i></i>what you had</span><span class="new"><i></i>what you gained</span></span>
-            </div>
-            <div class="fortnight-copy reveal">
-                <h2>The Fortnight.</h2>
-                <p class="big">Activity opens on the dexes that moved: what you had before, dim; what you gained, bright.</p>
+    <!-- The Recap: the dexes that moved, counting up, beside the real Activity screen -->
+    <section class="band b-gold" id="recap">
+        <div class="wrap recap">
+            <div class="recap-copy reveal">
+                <h2>The Recap.</h2>
+                <p class="big">Activity opens on the games you moved in the last 14 days, and by how much.</p>
                 <MovedRow client:visible rows={moved} />
                 <p>Then every run of unlocks, day by day, a year of streaks, and the heatmap. Mostly so you can see how much Poring Clicker you played.</p>
+            </div>
+            <div class="recap-shot reveal">
+                <Image class="shot phone-shot" src={activity} alt="Activity on a phone: the games that moved in the last 14 days, then the day's runs" widths={[390, 780]} sizes="(max-width: 960px) 70vw, 340px" />
             </div>
         </div>
     </section>
@@ -136,7 +121,7 @@ const jsonLd = [{
                 <h2>The Friends.</h2>
                 <p class="big">Everyone you follow on one timeline, each in a colour worked out from their name. Not random, not saved: the same name always gets the same colour.</p>
             </div>
-            <div class="reveal"><FriendColor client:visible /></div>
+            <div class="reveal"><FriendColor client:visible avatar={appIcon('yozuryu')} gameIcon={appIcon(16244)} /></div>
         </div>
     </section>
 
@@ -151,24 +136,8 @@ const jsonLd = [{
         </div>
     </section>
 
-    <!-- The Key: the whole journey of a request, drawn across the page -->
-    <section class="band b-deep" id="key">
-        <div class="wrap">
-            <div class="head-center reveal">
-                <h2>The Key.</h2>
-                <p class="big">No server, no account of its own. Your key stays on your device.</p>
-            </div>
-            <figure class="wireline reveal" aria-label="Your browser talks to the RetroAchievements API directly, with nothing in between">
-                <div class="wl-node"><b>Your browser</b><span>Cheevodex, and your web API key saved on this device</span></div>
-                <div class="wl-wire"><span>direct, over HTTPS</span></div>
-                <div class="wl-node"><b>RetroAchievements</b><span>its public web API</span></div>
-            </figure>
-            <p class="key-note reveal">Nothing in between. The code is on <a href={REPO}>GitHub</a> if you would like to check.</p>
-        </div>
-    </section>
-
-    <!-- The Setup: three steps on a progression path that ends at the app -->
-    <section class="band b-coal" id="setup">
+    <!-- The Setup: three steps on a progression path ending at the app, and where your key goes -->
+    <section class="band b-deep" id="setup">
         <div class="wrap">
             <div class="head-center reveal">
                 <h2>The Setup.</h2>
@@ -180,9 +149,12 @@ const jsonLd = [{
                 <li><i aria-hidden="true"></i><b>Connect</b><span>your username and the key in Cheevodex</span></li>
                 <li class="goal"><i aria-hidden="true"></i><a class="btn btn-primary" href={APP}>Open Cheevodex</a><span>Install it from your browser's menu and it opens like an app.</span></li>
             </ol>
-            <div class="setup-shot reveal">
-                <Image class="shot phone-shot" src={login} alt="The Cheevodex sign-in: RA username, API key and how to find the key" widths={[390, 780]} sizes="(max-width: 960px) 70vw, 320px" />
-            </div>
+            <figure class="keyline reveal" aria-label="Your browser talks to the RetroAchievements API directly, with nothing in between">
+                <span class="kl-node">Your browser<small>your key stays here</small></span>
+                <span class="kl-wire">direct, over HTTPS</span>
+                <span class="kl-node">RetroAchievements<small>its public web API</small></span>
+                <figcaption>Cheevodex has no server and no account of its own. The code is on <a href={REPO}>GitHub</a> if you would like to check.</figcaption>
+            </figure>
         </div>
     </section>
 
