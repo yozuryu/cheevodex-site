@@ -2,10 +2,11 @@
 // into view the ring fills to 11% and the progression path lights one diamond per progression achievement
 // unlocked (7 of 22). Shown at its end state without motion.
 import { useEffect, useRef, useState } from 'react';
+import Mono from './Mono';
 
 const REC = { no: 16244, title: 'Final Fantasy Crystal Chronicles: Ring of Fates', console: 'Nintendo DS', got: 9, total: 76, pts: 49, ptsTotal: 686, played: '4h 17m', path: [7, 22] as const };
 
-export default function DexRecord({ icon }: { icon: string }) {
+export default function DexRecord() {
     const ref = useRef<HTMLDivElement>(null);
     const [on, setOn] = useState(false);
     useEffect(() => {
@@ -18,7 +19,7 @@ export default function DexRecord({ icon }: { icon: string }) {
     return (
         <div ref={ref} className={`record ${on ? 'on' : ''}`} aria-label={`Dex record: ${REC.title}, ${REC.got} of ${REC.total} achievements, progression ${REC.path[0]} of ${REC.path[1]}`}>
             <div className="record-head">
-                <img src={icon} alt="" width="72" height="72" />
+                <Mono title={REC.title} />
                 <div>
                     <span className="dexno">Dex No.{REC.no}</span>
                     <b className="record-title">{REC.title}</b>

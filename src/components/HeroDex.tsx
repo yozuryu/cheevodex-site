@@ -2,9 +2,10 @@
 // the number types in, the ring fills to the real count, and the state lands (played, beaten, mastered).
 // Pauses on hover and focus; holds still on the first entry under reduced motion.
 import { useEffect, useRef, useState } from 'react';
+import Mono from './Mono';
 
 export type Entry = {
-    no: number; title: string; console: string; icon: string;
+    no: number; title: string; console: string;
     got: number; total: number; state: 'played' | 'beaten' | 'mastered';
     path?: [number, number];
 };
@@ -57,7 +58,7 @@ export default function HeroDex({ entries }: { entries: Entry[] }) {
             <div className="hdex-main" key={e.no}>
                 <span className={`ring ${e.state === 'mastered' && fill ? 'full' : ''}`}
                     style={{ ['--p' as string]: fill ? pct : 0, ['--c' as string]: st.color }}>
-                    <img src={e.icon} alt="" width="64" height="64" />
+                    <Mono title={e.title} />
                 </span>
                 <div className="hdex-id">
                     <b className="hdex-title">{e.title}</b>

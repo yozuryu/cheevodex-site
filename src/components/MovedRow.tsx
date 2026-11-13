@@ -1,8 +1,9 @@
 // "The dexes that moved", as Activity shows it: the ring holds what you had before the fortnight (dim) and
 // fills with what you gained (bright) while the +N counts up. Real numbers from the author's activity.
 import { useEffect, useRef, useState } from 'react';
+import Mono from './Mono';
 
-type Moved = { no: number; title: string; console: string; icon: string; before: number; now: number; total: number };
+type Moved = { no: number; title: string; console: string; before: number; now: number; total: number };
 
 export default function MovedRow({ rows }: { rows: Moved[] }) {
     const ref = useRef<HTMLDivElement>(null);
@@ -24,7 +25,7 @@ export default function MovedRow({ rows }: { rows: Moved[] }) {
                 return (
                     <div className="moved-row" key={r.no}>
                         <span className="ring two" style={{ ['--b' as string]: pBefore, ['--p' as string]: pNow, ['--c' as string]: 'var(--accent)' }}>
-                            <img src={r.icon} alt="" width="40" height="40" />
+                            <Mono title={r.title} />
                         </span>
                         <span className="moved-id"><b>{r.title}</b><small><span className="dexno">No.{r.no}</span> {r.console}</small></span>
                         <span className="moved-n"><b>+{gained}</b><small>{r.before} → {r.before + gained}/{r.total}</small></span>

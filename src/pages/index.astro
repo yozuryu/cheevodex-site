@@ -1,6 +1,4 @@
 ---
-import fs from 'node:fs';
-import path from 'node:path';
 import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import HeroDex, { type Entry } from '../components/HeroDex';
@@ -10,6 +8,7 @@ import MovedRow from '../components/MovedRow';
 import FriendColor from '../components/FriendColor';
 import { APP, REPO, RA, RA_KEYS } from '../lib/site';
 import consoles from '../lib/consoles.json';
+import dexData from '../lib/dex.json';
 import '../styles/home.css';
 
 import dDex from '../assets/shots/d-dex.png';
@@ -24,22 +23,21 @@ import overview from '../assets/shots/overview.png';
 import login from '../assets/shots/login.png';
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const icon = (no: number) => base + 'icons/' + no + '.png';
-const files = (dir: string) => fs.readdirSync(path.join(process.cwd(), 'public', dir)).filter(f => f.endsWith('.png')).sort();
 
-// The hero is a dex page: a grid of the author's real game icons that register one by one on load, with
-// the headline and a dex entry each taking a block of cells
-const dexIcons = files('wall').map(f => base + 'wall/' + f);
+// The hero is the author's dex drawn as Cheevodex art: one cell per game with its real dex number and a ring
+// at its real progress (blue in progress, silver beaten, gold mastered), registering one by one on load.
+// No game art outside the app screenshots.
+const dexCells = dexData as { no: number; pct: number; state: string }[];
 
 const entries: Entry[] = [
-    { no: 16244, title: 'Final Fantasy Crystal Chronicles: Ring of Fates', console: 'Nintendo DS', icon: icon(16244), got: 9, total: 76, state: 'played', path: [7, 22] },
-    { no: 11306, title: 'Tomba! 2: The Evil Swine Return', console: 'PlayStation', icon: icon(11306), got: 30, total: 45, state: 'beaten' },
-    { no: 2873, title: "Donald Duck: Goin' Quackers", console: 'PlayStation', icon: icon(2873), got: 46, total: 65, state: 'beaten' },
-    { no: 16452, title: '7th Dragon 2020', console: 'PlayStation Portable', icon: icon(16452), got: 80, total: 80, state: 'mastered' },
+    { no: 16244, title: 'Final Fantasy Crystal Chronicles: Ring of Fates', console: 'Nintendo DS', got: 9, total: 76, state: 'played', path: [7, 22] },
+    { no: 11306, title: 'Tomba! 2: The Evil Swine Return', console: 'PlayStation', got: 30, total: 45, state: 'beaten' },
+    { no: 2873, title: "Donald Duck: Goin' Quackers", console: 'PlayStation', got: 46, total: 65, state: 'beaten' },
+    { no: 16452, title: '7th Dragon 2020', console: 'PlayStation Portable', got: 80, total: 80, state: 'mastered' },
 ];
 const moved = [
-    { no: 16244, title: 'Final Fantasy Crystal Chronicles: Ring of Fates', console: 'Nintendo DS', icon: icon(16244), before: 0, now: 9, total: 76 },
-    { no: 45053, title: 'Poring Clicker', console: 'Standalone', icon: icon(45053), before: 0, now: 61, total: 156 },
+    { no: 16244, title: 'Final Fantasy Crystal Chronicles: Ring of Fates', console: 'Nintendo DS', before: 0, now: 9, total: 76 },
+    { no: 45053, title: 'Poring Clicker', console: 'Standalone', before: 0, now: 61, total: 156 },
 ];
 
 const web = async (img: ImageMetadata, width: number) => (await getImage({ src: img, width, format: 'webp' })).src;
@@ -91,14 +89,19 @@ const jsonLd = [{
                     <a class="btn btn-ghost" href="#setup">How to connect</a>
                 </div>
             </div>
-            <div class="dexgrid">
+            <div class="dexgrid" role="img" aria-label={`The author's dex of ${dexCells.length} games, each a dex number with a progress ring`}>
                 <div class="cell-entry">
                     <HeroDex client:visible entries={entries} />
                 </div>
-                {dexIcons.map((src, k) => <span class="cell" style={`--k:${(k * 37) % 61}`}><img src={src} alt="" width="80" height="80" loading={k < 40 ? 'eager' : 'lazy'} /></span>)}
+                {dexCells.map((g, k) => (
+                    <span class={`cell s-${g.state}`} style={`--k:${(k * 37) % 61};--p:${g.pct}`}>
+                        <span class="cell-no">{g.no}</span>
+                        <i class="cell-ring"></i>
+                    </span>
+                ))}
             </div>
             <div class="hero-foot">
-                <p class="dexgrid-note">Games from the author's dex of {dexIcons.length}, registering as you arrive. One entry is open.</p>
+                <p class="dexgrid-note">The author's dex: {dexCells.length} games by dex number, each ring at its real progress. One entry is open.</p>
                 <dl class="hero-facts">
                     <div><dt>Consoles</dt><dd>{consoles.length}</dd></div>
                     <div><dt>Price</dt><dd>Free</dd></div>
@@ -139,7 +142,7 @@ const jsonLd = [{
                     <li><b>The ring.</b> How far you are. It turns gold and glows when the game is mastered.</li>
                     <li><b>The numbers.</b> Achievements, points and time played, as index lines.</li>
                 </ol>
-                <div class="manual-card"><DexRecord client:visible icon={icon(16244)} /></div>
+                <div class="manual-card"><DexRecord client:visible /></div>
                 <ol class="callouts right" start="3">
                     <li><b>The path.</b> One diamond per progression achievement. Light them all and the game is beaten.</li>
                     <li><b>The number.</b> Dex No.16244 is its RetroAchievements game ID.</li>
@@ -230,7 +233,7 @@ const jsonLd = [{
     </section>
 </main>
 <script>
-    // Register every unlock: the dex icons turn from grey to colour one by one, once, with a gold flash.
+    // Register every unlock: the dex cells light up from grey to their state colour one by one, once, with a gold flash.
     // Without script, or with reduced motion, they are simply in colour.
     const grid = document.querySelector('.dexgrid');
     if (grid && !matchMedia('(prefers-reduced-motion: reduce)').matches) {

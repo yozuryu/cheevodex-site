@@ -42,6 +42,12 @@
 .js .reveal.in { opacity: 1; transform: none; }
 @keyframes settle { from { opacity: 0; transform: translateY(12px); } }
 
+/* A game's monogram, Cheevodex's own art in place of a game icon */
+.mono { display: grid; place-items: center; width: 100%; aspect-ratio: 1; border-radius: 50%; background: var(--box-hi); color: var(--ink); font: 600 28px/1 var(--display); }
+.ring > .mono { position: relative; width: calc(100% - var(--w, 6px) * 2 - 8px); }
+.moved-row .mono { font-size: 18px; }
+.record-head .mono { width: 72px; height: 72px; flex-shrink: 0; border-radius: 6px; font-size: 34px; }
+
 /* Digits are set in Geist Mono: in the pixel face a 5 reads as an S */
 
 /* ── Hero: the headline across the top, the collection below with one entry opened in it ── */
@@ -53,9 +59,18 @@
 .split-copy .cta, .setup-path .cta { justify-content: flex-start; }
 
 .dexgrid { --cols: 14; --gap: 8px; display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: var(--gap); grid-auto-flow: dense; }
-.cell { position: relative; aspect-ratio: 1; border-radius: 4px; overflow: hidden; background: var(--box); outline: 1px solid var(--line); outline-offset: -1px; }
-.cell img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; transition: filter 500ms var(--ease), opacity 500ms var(--ease); }
-.cell.dim img { filter: grayscale(1) brightness(0.45); opacity: 0.6; }
+.cell { --c: var(--accent); position: relative; aspect-ratio: 1; border-radius: 4px; overflow: hidden; display: grid; place-items: center;
+        background: var(--box); outline: 1px solid var(--line); outline-offset: -1px; transition: background-color 500ms var(--ease); }
+.cell.s-beaten { --c: var(--silver); } .cell.s-mastered { --c: var(--gold); background: rgb(242 183 49 / 0.08); }
+.cell.s-unstarted { --c: var(--line-2); }
+.cell-no { position: absolute; top: 7%; left: 9%; font: 8px/1 var(--pixel); color: var(--ink-3); letter-spacing: 0.04em; }
+.cell-ring { width: 52%; aspect-ratio: 1; border-radius: 50%; margin-top: 10%;
+             background: conic-gradient(var(--c) calc(var(--p) * 1%), rgb(232 229 223 / 0.09) 0);
+             -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px));
+                     mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px)); transition: filter 500ms var(--ease); }
+.cell.s-mastered .cell-ring { filter: drop-shadow(0 0 5px rgb(242 183 49 / 0.6)); }
+.cell.dim .cell-ring { filter: grayscale(1) brightness(0.5); }
+.cell.dim { background: var(--box); }
 .cell.reg::after { content: ''; position: absolute; inset: 0; border-radius: 4px; box-shadow: inset 0 0 0 2px var(--gold); opacity: 0; animation: register 900ms var(--ease) both; }
 @keyframes register { 15% { opacity: 1; } to { opacity: 0; } }
 /* The opened entry: six cells wide, four tall, in the middle of the collection */
