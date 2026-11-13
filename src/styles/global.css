@@ -1,0 +1,85 @@
+/* Cheevodex site: the app's own palette (charcoal, RetroAchievements blue, gold for what is earned, silver
+   for beaten) and its faces: a pixel display face for headlines, Geist for reading, Silkscreen for dex
+   numbers. Shared by every page. */
+:root {
+    --page: #111111;
+    --bar: #0c0c0c;
+    --box: #1a1918;
+    --box-hi: #201f1e;
+    --well: #0c0c0c;
+    --line: #2c2b29;
+    --line-2: #363431;
+    --ink: #e8e5df;
+    --ink-2: #9b968e;
+    --ink-3: #6f6a63;
+    --accent: #2c97fa;
+    --accent-hi: #6cb8ff;
+    --gold: #f2b731;
+    --gold-hi: #ffd76e;
+    --silver: #c4cad1;
+
+    --display: 'Pixelify Sans', 'Geist', system-ui, sans-serif;
+    --body: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --mono: 'Geist Mono', ui-monospace, Menlo, monospace;
+    --pixel: 'Silkscreen', 'Geist Mono', monospace;
+
+    --wrap: 1180px;
+    --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { overflow-x: clip; }
+html { scroll-behavior: smooth; scroll-padding-top: 88px; background: var(--page); }
+body { margin: 0; background: var(--page); color: var(--ink); font: 400 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+::selection { background: rgb(44 151 250 / 0.3); color: var(--ink); }
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--accent-hi); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+a:hover { color: var(--ink); }
+:focus-visible { outline: 2px solid var(--accent-hi); outline-offset: 3px; }
+h1, h2, h3 { margin: 0; font-family: var(--display); font-weight: 600; line-height: 1.05; letter-spacing: 0; text-wrap: balance; overflow-wrap: break-word; }
+p { margin: 0; text-wrap: pretty; }
+
+.wrap { width: 100%; max-width: var(--wrap); margin-inline: auto; padding-inline: max(20px, env(safe-area-inset-left, 0px)) max(20px, env(safe-area-inset-right, 0px)); }
+@media (min-width: 768px) { .wrap { padding-inline: 32px; } }
+
+.skip { position: absolute; left: 16px; top: -60px; z-index: 50; padding: 8px 14px; background: var(--ink); color: var(--page); border-radius: 3px; }
+.skip:focus-visible { top: 12px; }
+
+/* Buttons: one filled primary, a quiet outline beside it */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 22px; border: 1px solid transparent; border-radius: 3px;
+       font: 600 15px/1 var(--body); text-decoration: none; white-space: nowrap; cursor: pointer;
+       transition: background-color 180ms var(--ease), border-color 180ms var(--ease), color 180ms var(--ease), transform 120ms var(--ease); }
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--accent); color: #0b0b0b; }
+.btn-primary:hover { background: var(--accent-hi); color: #0b0b0b; }
+.btn-ghost { border-color: var(--line-2); color: var(--ink); background: rgb(17 17 17 / 0.6); }
+.btn-ghost:hover { border-color: var(--ink-3); color: var(--ink); background: var(--box); }
+.btn-sm { min-height: 38px; padding: 0 14px; font-size: 14px; }
+
+/* Nav: the codex mark and wordmark, four destinations, the app */
+.nav { position: sticky; top: 0; z-index: 40; background: rgb(12 12 12 / 0.86); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.nav .wrap { display: flex; align-items: center; gap: 24px; min-height: 64px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font: 700 19px/1 var(--body); letter-spacing: -0.01em; }
+.brand img { image-rendering: pixelated; }
+.brand b { color: var(--accent); font-weight: 700; }
+.brand:hover { color: var(--ink); }
+.nav-links { display: flex; gap: 22px; margin-left: auto; }
+.nav-links a { color: var(--ink-2); text-decoration: none; font-size: 15px; }
+.nav-links a:hover { color: var(--ink); }
+@media (max-width: 760px) { .nav-links { display: none; } .nav .btn { margin-left: auto; } }
+
+/* Footer */
+.foot { border-top: 1px solid var(--line); background: var(--bar); padding-block: 48px calc(40px + env(safe-area-inset-bottom, 0px)); }
+.foot .wrap { display: grid; gap: 28px; }
+@media (min-width: 800px) { .foot .wrap { grid-template-columns: minmax(0, 1fr) auto; align-items: start; } }
+.foot-brand { display: flex; flex-direction: column; gap: 12px; }
+.foot-brand p { color: var(--ink-2); font-size: 15px; max-width: 44ch; }
+.foot-links { display: flex; flex-wrap: wrap; gap: 10px 24px; }
+.foot-links a { color: var(--ink-2); text-decoration: none; font-size: 15px; }
+.foot-links a:hover { color: var(--ink); }
+.foot-note { grid-column: 1 / -1; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 13.5px; }
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}

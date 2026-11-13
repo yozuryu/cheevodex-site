@@ -1,0 +1,95 @@
+---
+// Every page: the SEO head (title, description, canonical, Open Graph, Twitter, JSON-LD), the badge wall,
+// the nav and the footer.
+import '../styles/global.css';
+import { APP, REPO, RA } from '../lib/site';
+
+interface Props {
+    title: string;
+    description: string;
+    ogImage?: string;
+    jsonLd?: Record<string, unknown>[];
+}
+const { title, description, ogImage = 'assets/og.jpg', jsonLd = [] } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const image = new URL(base + ogImage, Astro.site).href;
+const home = new URL(base, Astro.site).href;
+const ld = [
+    { '@context': 'https://schema.org', '@type': 'WebSite', name: 'Cheevodex', url: home },
+    ...jsonLd.map(x => ({ '@context': 'https://schema.org', ...x })),
+];
+---
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>{title}</title>
+    <meta name="description" content={description}>
+    <link rel="canonical" href={canonical}>
+    <meta name="theme-color" content="#111111">
+    <meta name="color-scheme" content="dark">
+    <meta property="og:site_name" content="Cheevodex">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content={title}>
+    <meta property="og:description" content={description}>
+    <meta property="og:url" content={canonical}>
+    <meta property="og:image" content={image}>
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Cheevodex: every RetroAchievements game you've played as a numbered dex entry, with rings, streaks and friends">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content={title}>
+    <meta name="twitter:description" content={description}>
+    <meta name="twitter:image" content={image}>
+    <link rel="icon" href={base + 'assets/favicon.ico'} sizes="any">
+    <link rel="icon" type="image/svg+xml" href={base + 'assets/favicon.svg'}>
+    <link rel="apple-touch-icon" href={base + 'assets/icon-192.png'}>
+    <link rel="sitemap" href={base + 'sitemap-index.xml'}>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;600;700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@500;600&family=Silkscreen&display=swap">
+    <script is:inline>document.documentElement.classList.add('js')</script>
+    {ld.map(x => <script type="application/ld+json" set:html={JSON.stringify(x)} />)}
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav">
+    <div class="wrap">
+        <a class="brand" href={base} aria-label="Cheevodex home"><img src={base + 'assets/favicon.svg'} alt="" width="28" height="28"><span>Cheevo<b>dex</b></span></a>
+        <nav class="nav-links" aria-label="Site">
+            <a href={base + '#dex'}>The Dex</a>
+            <a href={base + '#contents'}>Features</a>
+            <a href={base + '#private'}>Privacy</a>
+            <a href={base + '#connect'}>Connect</a>
+        </nav>
+        <a class="btn btn-primary btn-sm" href={APP}>Open Cheevodex</a>
+    </div>
+</header>
+
+<slot />
+
+<footer class="foot">
+    <div class="wrap">
+        <div class="foot-brand">
+            <a class="brand" href={base}><img src={base + 'assets/favicon.svg'} alt="" width="28" height="28"><span>Cheevo<b>dex</b></span></a>
+            <p>A pocket companion for RetroAchievements. Free and open source under the MIT licence.</p>
+        </div>
+        <nav class="foot-links" aria-label="Footer">
+            <a href={APP}>Open the app</a>
+            <a href={APP + 'changelog/'}>Changelog</a>
+            <a href={REPO}>Source on GitHub</a>
+            <a href={RA}>RetroAchievements</a>
+        </nav>
+        <p class="foot-note">Unofficial. Not affiliated with RetroAchievements. Game names, icons and badges belong to their owners and come from RetroAchievements.</p>
+    </div>
+</footer>
+<script>
+    // One reveal for the whole page: sections settle in as they arrive. Visible without script.
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+</script>
+</body>
+</html>
