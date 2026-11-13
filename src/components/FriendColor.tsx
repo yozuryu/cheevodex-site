@@ -16,9 +16,11 @@ export default function FriendColor() {
     const c = friendColor(name.trim() || ' ');
     return (
         <div className="fc">
-            <label htmlFor="fc-name">A RetroAchievements username</label>
-            <input id="fc-name" name="username" type="text" autoComplete="off" spellCheck={false} maxLength={20}
-                value={name} onChange={e => setName(e.target.value)} />
+            <div className="fc-field">
+                <label htmlFor="fc-name">Type a RetroAchievements username</label>
+                <input id="fc-name" name="username" type="text" autoComplete="off" spellCheck={false} maxLength={20}
+                    value={name} onChange={e => setName(e.target.value)} />
+            </div>
             <div className="fc-post" style={{ ['--fc' as string]: c }}>
                 <span className="fc-av" aria-hidden="true">{(name.trim()[0] || '?').toUpperCase()}</span>
                 <span className="fc-body">

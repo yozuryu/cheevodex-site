@@ -27,11 +27,9 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const icon = (no: number) => base + 'icons/' + no + '.png';
 const files = (dir: string) => fs.readdirSync(path.join(process.cwd(), 'public', dir)).filter(f => f.endsWith('.png')).sort();
 
-// The hero wall: every game icon in the author's dex, with their badges mixed in (Backloggd's cover wall, our way)
-const gamesIcons = files('wall').map(f => base + 'wall/' + f);
-const badgeIcons = files('badges').map(f => base + 'badges/' + f);
-const wallTiles = gamesIcons.flatMap((g, k) => [g, badgeIcons[k % badgeIcons.length]]);
-const wallRows = [0, 1, 2, 3, 4].map(r => wallTiles.filter((_, k) => k % 5 === r));
+// The hero is a dex page: a grid of the author's real game icons that register one by one on load, with
+// the headline and a dex entry each taking a block of cells
+const dexIcons = files('wall').map(f => base + 'wall/' + f);
 
 const entries: Entry[] = [
     { no: 16244, title: 'Final Fantasy Crystal Chronicles: Ring of Fates', console: 'Nintendo DS', icon: icon(16244), got: 9, total: 76, state: 'played', path: [7, 22] },
@@ -82,107 +80,103 @@ const jsonLd = [{
 <Base title="Cheevodex: a pocket companion for RetroAchievements" {description} {jsonLd}>
 <main id="main">
 
-    <!-- Hero: a wall of the author's games and badges, the copy, and a dex entry writing itself -->
+    <!-- Hero: the page is a dex. Icons register one by one; the headline and a dex entry hold blocks of cells -->
     <section class="hero">
-        <div class="wall" aria-hidden="true">
-            {wallRows.map((r, k) => (
-                <div class={`wrow w${k}`}>{[...r, ...r].map(src => <img src={src} alt="" width="72" height="72" loading="lazy" />)}</div>
-            ))}
-        </div>
-        <div class="wrap hero-grid">
-            <div class="hero-copy">
-                <h1>Every unlock, in your own dex.</h1>
-                <p class="lede">Cheevodex turns your RetroAchievements account into a dex: every game you have played, numbered, ringed and ready on your phone.</p>
-                <div class="cta">
-                    <a class="btn btn-primary" href={APP}>Open Cheevodex</a>
-                    <a class="btn btn-ghost" href="#setup">How to connect</a>
+        <div class="wrap">
+            <div class="dexgrid">
+                <div class="cell-copy">
+                    <h1>Every unlock, in your own dex.</h1>
+                    <p class="lede">Cheevodex turns your RetroAchievements account into a dex: every game you have played, numbered, ringed and ready on your phone.</p>
+                    <div class="cta">
+                        <a class="btn btn-primary" href={APP}>Open Cheevodex</a>
+                        <a class="btn btn-ghost" href="#setup">How to connect</a>
+                    </div>
+                    <dl class="hero-facts">
+                        <div><dt>Consoles</dt><dd>{consoles.length}</dd></div>
+                        <div><dt>Price</dt><dd>Free</dd></div>
+                        <div><dt>Licence</dt><dd>MIT</dd></div>
+                    </dl>
                 </div>
-                <dl class="hero-facts">
-                    <div><dt>Consoles</dt><dd>{consoles.length}</dd></div>
-                    <div><dt>Price</dt><dd>Free</dd></div>
-                    <div><dt>Licence</dt><dd>MIT</dd></div>
-                </dl>
+                <div class="cell-entry">
+                    <HeroDex client:visible entries={entries} />
+                </div>
+                {dexIcons.map((src, k) => <span class="cell" style={`--k:${(k * 37) % 61}`}><img src={src} alt="" width="80" height="80" loading={k < 40 ? 'eager' : 'lazy'} /></span>)}
             </div>
-            <div class="hero-stage">
-                <HeroDex client:visible entries={entries} />
-            </div>
+            <p class="dexgrid-note">Games from the author's dex of {dexIcons.length}, registering as you arrive.</p>
         </div>
     </section>
 
-    <!-- Every system RetroAchievements covers, as a ticker -->
-    <div class="ticker" role="img" aria-label={`Works with the ${consoles.length} systems RetroAchievements supports`}>
-        <div class="ticker-track" aria-hidden="true">
-            {[...consoles, ...consoles].map(c => <span>{c}</span>)}
-        </div>
-    </div>
-
-    <!-- The Dex. (blue band) -->
+    <!-- The Dex: the heading at full size over the desktop screen, the counts set into it -->
     <section class="band b-blue" id="dex">
-        <div class="wrap split">
-            <div class="split-copy reveal">
+        <div class="wrap">
+            <div class="head-row reveal">
                 <h2>The Dex.</h2>
-                <p class="big">Every game you have touched on RetroAchievements gets an entry and a number: its RA game ID.</p>
-                <p>Search it by name or number. Filter to what you have not beaten yet. Read it console by console. Is it a list? Technically. It is a dex.</p>
-                <dl class="dexcount">
+                <p class="big">Every game you have touched on RetroAchievements gets an entry and a number: its RA game ID. Is it a list? Technically. It is a dex.</p>
+            </div>
+            <figure class="screen reveal">
+                <Image class="shot screen-shot" src={dDex} alt="The Dex on desktop: every played game as a numbered entry beside the profile rail" widths={[900, 1400, 2000]} sizes="(max-width: 1180px) 94vw, 1116px" />
+                <dl class="screen-panel">
                     <div><dt>Played</dt><dd>96</dd></div>
                     <div><dt>Beaten</dt><dd>8</dd></div>
                     <div><dt>Mastered</dt><dd>2</dd></div>
+                    <figcaption>The author's dex. Search by name or number, filter to what is not beaten yet, or sort by console.</figcaption>
                 </dl>
-                <p class="caption">The author's dex, as Cheevodex shows it.</p>
-            </div>
-            <div class="split-shot reveal">
-                <Image class="shot phone-shot" src={dex} alt="The Dex on a phone: numbered entries with their icons, counts and state" widths={[390, 780]} sizes="(max-width: 960px) 70vw, 340px" />
-            </div>
+            </figure>
         </div>
     </section>
 
-    <!-- The Record. (charcoal band) -->
+    <!-- The Record: a manual page, the live record in the middle with its parts called out -->
     <section class="band b-coal" id="record">
-        <div class="wrap split flip">
-            <div class="split-copy reveal">
+        <div class="wrap">
+            <div class="head-center reveal">
                 <h2>The Record.</h2>
-                <p class="big">Each game opens as a dex record: a ring for how far you are, index lines for the numbers.</p>
-                <p>And a path with one diamond for every progression achievement. Light them all and the game is beaten. Watch it light up.</p>
+                <p class="big">Each game opens as a dex record. Here is how to read one.</p>
             </div>
-            <div class="split-shot reveal">
-                <DexRecord client:visible icon={icon(16244)} />
+            <div class="manual reveal">
+                <ol class="callouts left">
+                    <li><b>The ring.</b> How far you are. It turns gold and glows when the game is mastered.</li>
+                    <li><b>The numbers.</b> Achievements, points and time played, as index lines.</li>
+                </ol>
+                <div class="manual-card"><DexRecord client:visible icon={icon(16244)} /></div>
+                <ol class="callouts right" start="3">
+                    <li><b>The path.</b> One diamond per progression achievement. Light them all and the game is beaten.</li>
+                    <li><b>The number.</b> Dex No.16244 is its RetroAchievements game ID.</li>
+                </ol>
             </div>
         </div>
     </section>
 
-    <!-- The Fortnight. (gold band) -->
+    <!-- The Fortnight: the two-tone ring at poster size, the moved rows playing beside it -->
     <section class="band b-gold" id="fortnight">
-        <div class="wrap split">
-            <div class="split-copy reveal">
+        <div class="wrap fortnight">
+            <div class="poster-ring reveal" role="img" aria-label="A ring: the part you already had, dim, and the part you gained this fortnight, bright">
+                <span class="ring two big" style="--b:38;--p:62;--c:var(--accent)"></span>
+                <span class="pr-legend"><span class="dim"><i></i>what you had</span><span class="new"><i></i>what you gained</span></span>
+            </div>
+            <div class="fortnight-copy reveal">
                 <h2>The Fortnight.</h2>
                 <p class="big">Activity opens on the dexes that moved: what you had before, dim; what you gained, bright.</p>
+                <MovedRow client:visible rows={moved} />
                 <p>Then every run of unlocks, day by day, a year of streaks, and the heatmap. Mostly so you can see how much Poring Clicker you played.</p>
             </div>
-            <div class="split-shot reveal moved-stage">
-                <MovedRow client:visible rows={moved} />
-                <Image class="shot phone-shot mini" src={activity} alt="Activity on a phone: the dexes that moved, then the day's runs" widths={[390, 780]} sizes="(max-width: 960px) 50vw, 240px" />
-            </div>
         </div>
     </section>
 
-    <!-- The Friends. (charcoal band, interactive) -->
+    <!-- The Friends: a full-width instrument -->
     <section class="band b-coal" id="friends">
-        <div class="wrap split flip">
-            <div class="split-copy reveal">
+        <div class="wrap">
+            <div class="head-row reveal">
                 <h2>The Friends.</h2>
-                <p class="big">Everyone you follow on one timeline, newest first, each in a colour worked out from their name.</p>
-                <p>Not picked at random, not saved anywhere: the same name always gets the same colour. Try yours.</p>
+                <p class="big">Everyone you follow on one timeline, each in a colour worked out from their name. Not random, not saved: the same name always gets the same colour.</p>
             </div>
-            <div class="split-shot reveal">
-                <FriendColor client:visible />
-            </div>
+            <div class="reveal"><FriendColor client:visible /></div>
         </div>
     </section>
 
-    <!-- The Contents. -->
+    <!-- The Contents: a contents page across the spread -->
     <section class="band b-ink" id="contents">
         <div class="wrap">
-            <div class="section-head reveal">
+            <div class="head-row reveal">
                 <h2>The Contents.</h2>
                 <p class="big">Six parts, one tap apart. Pick a line to turn to it.</p>
             </div>
@@ -190,43 +184,42 @@ const jsonLd = [{
         </div>
     </section>
 
-    <!-- The Key. (deep blue band) -->
+    <!-- The Key: the whole journey of a request, drawn across the page -->
     <section class="band b-deep" id="key">
-        <div class="wrap split">
-            <div class="split-copy reveal">
+        <div class="wrap">
+            <div class="head-center reveal">
                 <h2>The Key.</h2>
-                <p class="big">Cheevodex has no server and no account of its own.</p>
-                <p>It asks RetroAchievements directly from your browser with your web API key, and the key stays on your device. The code is on <a href={REPO}>GitHub</a> if you would like to check.</p>
+                <p class="big">No server, no account of its own. Your key stays on your device.</p>
             </div>
-            <figure class="flow reveal" aria-label="Your browser talks to the RetroAchievements API directly">
-                <div class="node"><b>Your browser</b><span>Cheevodex, with your key saved on this device</span></div>
-                <div class="wire"><span>direct, over HTTPS</span></div>
-                <div class="node"><b>RetroAchievements</b><span>its public web API</span></div>
-                <figcaption>Nothing in between.</figcaption>
+            <figure class="wireline reveal" aria-label="Your browser talks to the RetroAchievements API directly, with nothing in between">
+                <div class="wl-node"><b>Your browser</b><span>Cheevodex, and your web API key saved on this device</span></div>
+                <div class="wl-wire"><span>direct, over HTTPS</span></div>
+                <div class="wl-node"><b>RetroAchievements</b><span>its public web API</span></div>
             </figure>
+            <p class="key-note reveal">Nothing in between. The code is on <a href={REPO}>GitHub</a> if you would like to check.</p>
         </div>
     </section>
 
-    <!-- The Setup. -->
+    <!-- The Setup: three steps on a progression path that ends at the app -->
     <section class="band b-coal" id="setup">
-        <div class="wrap split flip">
-            <div class="split-copy reveal">
+        <div class="wrap">
+            <div class="head-center reveal">
                 <h2>The Setup.</h2>
-                <ol class="steps">
-                    <li><span>Log in at <a href={RA}>retroachievements.org</a>.</span></li>
-                    <li><span>Open <a href={RA_KEYS}>Settings</a>, then Keys, and copy your web API key.</span></li>
-                    <li><span>Open Cheevodex and enter your username and the key.</span></li>
-                </ol>
-                <p>That is the whole setup. Install it from your browser's menu and it opens full screen, like an app.</p>
-                <div class="cta"><a class="btn btn-primary" href={APP}>Open Cheevodex</a></div>
+                <p class="big">Three steps. Light them all and your dex opens.</p>
             </div>
-            <div class="split-shot reveal">
-                <Image class="shot phone-shot" src={login} alt="The Cheevodex sign-in: RA username, API key and how to find the key" widths={[390, 780]} sizes="(max-width: 960px) 70vw, 340px" />
+            <ol class="setup-path reveal">
+                <li><i aria-hidden="true"></i><b>Log in</b><span>at <a href={RA}>retroachievements.org</a></span></li>
+                <li><i aria-hidden="true"></i><b>Copy your key</b><span>from <a href={RA_KEYS}>Settings</a>, then Keys</span></li>
+                <li><i aria-hidden="true"></i><b>Connect</b><span>your username and the key in Cheevodex</span></li>
+                <li class="goal"><i aria-hidden="true"></i><a class="btn btn-primary" href={APP}>Open Cheevodex</a><span>Install it from your browser's menu and it opens like an app.</span></li>
+            </ol>
+            <div class="setup-shot reveal">
+                <Image class="shot phone-shot" src={login} alt="The Cheevodex sign-in: RA username, API key and how to find the key" widths={[390, 780]} sizes="(max-width: 960px) 70vw, 320px" />
             </div>
         </div>
     </section>
 
-    <!-- The close, in Analogue's register -->
+    <!-- The close -->
     <section class="close">
         <div class="wrap">
             <p class="close-line reveal">For everyone still chasing the last achievement in a game older than they are.</p>
@@ -234,4 +227,15 @@ const jsonLd = [{
         </div>
     </section>
 </main>
+<script>
+    // Register every unlock: the dex icons turn from grey to colour one by one, once, with a gold flash.
+    // Without script, or with reduced motion, they are simply in colour.
+    const grid = document.querySelector('.dexgrid');
+    if (grid && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const cells = [...grid.querySelectorAll<HTMLElement>('.cell')];
+        cells.forEach(c => c.classList.add('dim'));
+        const order = cells.map((c, k) => [Number(c.style.getPropertyValue('--k')) || k, c] as const).sort((a, b) => a[0] - b[0]);
+        order.forEach(([, c], k) => setTimeout(() => { c.classList.remove('dim'); c.classList.add('reg'); }, 350 + k * 28));
+    }
+</script>
 </Base>
