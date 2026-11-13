@@ -3,8 +3,9 @@ import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import HeroB from '../components/heroes/HeroB.astro';
 import RecordTour, { type Rec } from '../components/RecordTour';
-import FriendsPreview, { type Post } from '../components/FriendsPreview';
+import FriendsPreview, { type GameSet } from '../components/FriendsPreview';
 import examples from '../lib/examples.json';
+import setsData from '../lib/sets.json';
 import Contents, { type Part } from '../components/Contents';
 import MovedRow from '../components/MovedRow';
 import { APP, REPO, RA, RA_KEYS } from '../lib/site';
@@ -38,14 +39,8 @@ const records: Rec[] = [
     { state: 'beaten', ...g('kirby'), got: 41, total: 60, pts: 405, ptsTotal: 600, played: '9h 12m', path: [15, 15] },
     { state: 'mastered', ...g('oot'), got: 96, total: 96, pts: 815, ptsTotal: 815, played: '41h 5m', path: [30, 30] },
 ];
-const unlocks = (k: string) => ex[k].unlocks!.map(u => ({ ...u, badge: base + 'app-icons/' + u.badge }));
-const posts: Post[] = [
-    { name: 'Yozuryu', time: '22:40', runs: [
-        { ...g('windwaker'), time: '21:05–22:40', unlocks: unlocks('windwaker') },
-        { ...g('fate'), time: '19:30–20:10', unlocks: unlocks('fate') } ] },
-    { name: 'SaveStateSue', time: '18:12', runs: [
-        { ...g('nfs2'), time: '17:20–18:12', unlocks: unlocks('nfs2') } ] },
-];
+// Ten real RetroAchievements sets (eight achievements each) that the Friends preview builds evenings from
+const sets: GameSet[] = setsData.map(x => ({ ...x, icon: base + 'app-icons/' + x.icon, achievements: x.achievements.map(a => ({ ...a, badge: base + 'app-icons/' + a.badge })) }));
 
 const web = async (img: ImageMetadata, width: number) => (await getImage({ src: img, width, format: 'webp' })).src;
 const parts: Part[] = [
@@ -137,14 +132,13 @@ const jsonLd = [faqLd, {
                 <h2>The Friends.</h2>
                 <p class="big">Everyone you follow on RetroAchievements, on one timeline.</p>
                 <dl class="ledger friends-list">
-                    <div class="row"><dt>Who is active</dt><i></i><dd>a strip of faces, newest first</dd></div>
-                    <div class="row"><dt>What they played</dt><i></i><dd>runs by day, game by game</dd></div>
-                    <div class="row"><dt>What they unlocked</dt><i></i><dd>the badges, then every row</dd></div>
-                    <div class="row"><dt>Who is who</dt><i></i><dd>one colour per name, always</dd></div>
+                    <div class="row"><dt>Who played</dt><i></i><dd>newest first</dd></div>
+                    <div class="row"><dt>What they unlocked</dt><i></i><dd>game by game</dd></div>
+                    <div class="row"><dt>Their colour</dt><i></i><dd>from their name</dd></div>
                 </dl>
-                <p>Tap a friend to see only their runs, or a game to open it beside your own progress. A friend's colour comes from their name, so it is the same on every device and never saved anywhere.</p>
+                <p>Type any name to see their evening.</p>
             </div>
-            <div class="reveal"><FriendsPreview client:visible posts={posts} avatar={appIcon('yozuryu')} /></div>
+            <div class="reveal"><FriendsPreview client:visible sets={sets} avatar={appIcon('yozuryu')} /></div>
         </div>
     </section>
 
