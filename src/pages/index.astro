@@ -20,6 +20,9 @@ import activity from '../assets/shots/activity.png';
 import backlog from '../assets/shots/backlog.png';
 import dStats from '../assets/shots/d-stats.png';
 import overview from '../assets/shots/overview.png';
+import stats from '../assets/shots/stats.png';
+import dBacklog from '../assets/shots/d-backlog.png';
+import dOverview from '../assets/shots/d-overview.png';
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 // Game icons and the author's avatar, shown only inside previews of the app
@@ -51,11 +54,12 @@ const parts: Part[] = [
     { id: 'activity', name: 'Activity', holds: 'runs, day by day', text: 'The dexes that moved in the last fortnight, then every run of unlocks, day by day, with a year of streaks and a heatmap.',
       desk: { src: await web(dActivity, 1440), alt: 'Activity on desktop: the dexes that moved, the year and recent runs' }, phone: { src: await web(activity, 390), alt: 'Activity on a phone' } },
     { id: 'backlog', name: 'Backlog', holds: 'your want-to-play list', text: 'Your want-to-play list as an index: the games you have started up next, then every game by console under A to Z, lit up once you start it.',
+      desk: { src: await web(dBacklog, 1440), alt: 'The backlog on desktop: up next as dex cards, then an index of games by console in two columns' },
       phone: { src: await web(backlog, 390), alt: 'The backlog on a phone: up next as dex cards, then an index of games by console', pos: '50% 100%' } },
     { id: 'stats', name: 'Stats', holds: 'a year in charts', text: 'Streaks and pace as index lines, points across the year, masteries by month, consoles and how rare your unlocks are.',
-      desk: { src: await web(dStats, 1440), alt: 'Stats on desktop: streaks, point acquisition, masteries, consoles and rarity' } },
+      desk: { src: await web(dStats, 1440), alt: 'Stats on desktop: streaks, point acquisition, masteries, consoles and rarity' }, phone: { src: await web(stats, 390), alt: 'Stats on a phone: streaks, point acquisition and masteries' } },
     { id: 'overview', name: 'Overview', holds: 'the profile at a glance', text: 'Last played, recent unlocks, your stats and every award, with the latest mastery on top.',
-      phone: { src: await web(overview, 390), alt: 'The profile overview on a phone' } },
+      desk: { src: await web(dOverview, 1440), alt: 'The profile overview on desktop: last played, recent unlocks and game awards' }, phone: { src: await web(overview, 390), alt: 'The profile overview on a phone' } },
 ];
 
 const description = 'Cheevodex is a free, open-source companion for RetroAchievements: every game you have played as a numbered dex entry, with completion rings, activity, friends and your backlog. Runs in your browser; your API key never leaves it.';
