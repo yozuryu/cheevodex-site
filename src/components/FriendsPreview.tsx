@@ -2,7 +2,7 @@
 // generator that picks that player's evening (1 or 2 games from ten real RetroAchievements sets, 2 to 4 of each
 // set's real achievements, the times), names a friend from the same seed and gives them a game too. Same name,
 // same post, on every device, like the friend colour itself.
-import { useMemo, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { friendColor } from './FriendColor';
 
 export type Ach = { title: string; badge: string; points: number };
@@ -70,14 +70,36 @@ function RunCard({ run }: { run: Run }) {
 }
 
 export default function FriendsPreview({ sets, avatar }: { sets: GameSet[]; avatar: string }) {
-    const [name, setName] = useState(OWNER);
+    const [name, setName] = useState(OWNER);       // what is in the box
+    const [shown, setShown] = useState(OWNER);     // whose evening is on screen: follows the box once typing pauses
+    const [phase, setPhase] = useState<'idle' | 'out' | 'in'>('idle');
+    const inner = useRef<HTMLDivElement>(null);
+    const [height, setHeight] = useState<number | null>(null);
+    useEffect(() => {
+        if (name === shown) return;
+        const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (still) { setShown(name); return; }
+        let swap = 0;
+        const wait = window.setTimeout(() => {
+            setPhase('out');                                           // fade the old posts first
+            swap = window.setTimeout(() => { setShown(name); setPhase('in'); }, 160);
+        }, 220);
+        return () => { clearTimeout(wait); clearTimeout(swap); };
+    }, [name, shown]);
+    useLayoutEffect(() => {                                            // the card grows and shrinks with its posts instead of jumping
+        const el = inner.current;
+        if (!el) return;
+        const ro = new ResizeObserver(() => setHeight(el.offsetHeight));
+        ro.observe(el);
+        return () => ro.disconnect();
+    }, []);
     const posts = useMemo(() => {
-        const me = name.trim() || 'someone';
+        const me = shown.trim() || 'someone';
         const mine = evening(me, sets, 1 + (seedOf(me) % 2));
         const used = mine.runs.map(x => sets.indexOf(x.set));
         const theirs = evening(friendOf(me), sets, 1, used);
         return [mine, theirs].sort((a, b) => b.end - a.end);
-    }, [name, sets]);
+    }, [shown, sets]);
     const total = posts.reduce((t, p) => t + p.runs.reduce((u, r) => u + r.unlocks.length, 0), 0);
     return (
         <div className="fp">
@@ -85,21 +107,25 @@ export default function FriendsPreview({ sets, avatar }: { sets: GameSet[]; avat
                 <label htmlFor="fp-name">Type any RetroAchievements username</label>
                 <input id="fp-name" name="username" type="text" autoComplete="off" spellCheck={false} maxLength={20} value={name} onChange={e => setName(e.target.value)} />
             </div>
-            <div className="fp-day"><b>Today</b><span>{total} unlocks · {posts.length} friends</span></div>
-            <div className="fp-rail" aria-live="polite">
-                {posts.map(p => {
-                    const own = p.name.toLowerCase() === OWNER.toLowerCase();
-                    const n = p.runs.reduce((u, r) => u + r.unlocks.length, 0);
-                    return (
-                        <div className="fp-post" key={p.name} style={{ ['--fc' as string]: friendColor(p.name) }}>
-                            <span className="fp-av" aria-hidden="true">{own ? <img src={avatar} alt="" width="40" height="40" /> : p.name[0].toUpperCase()}</span>
-                            <div className="fp-main">
-                                <div className="fp-h"><b>{p.name}</b><time>{clock(p.end)}</time>{p.runs.length > 1 && <span>+{n} in {p.runs.length} games</span>}</div>
-                                {p.runs.map(r => <RunCard key={r.set.no} run={r} />)}
-                            </div>
-                        </div>
-                    );
-                })}
+            <div className="fp-stage" style={height === null ? undefined : { height }}>
+                <div ref={inner} className={`fp-inner ${phase}`}>
+                    <div className="fp-day"><b>Today</b><span>{total} unlocks · {posts.length} friends</span></div>
+                    <div className="fp-rail" aria-live="polite">
+                        {posts.map((p, i) => {
+                            const own = p.name.toLowerCase() === OWNER.toLowerCase();
+                            const n = p.runs.reduce((u, r) => u + r.unlocks.length, 0);
+                            return (
+                                <div className="fp-post" key={p.name} style={{ ['--fc' as string]: friendColor(p.name), ['--i' as string]: i }}>
+                                    <span className="fp-av" aria-hidden="true">{own ? <img src={avatar} alt="" width="40" height="40" /> : p.name[0].toUpperCase()}</span>
+                                    <div className="fp-main">
+                                        <div className="fp-h"><b>{p.name}</b><time>{clock(p.end)}</time>{p.runs.length > 1 && <span>+{n} in {p.runs.length} games</span>}</div>
+                                        {p.runs.map(r => <RunCard key={r.set.no} run={r} />)}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
             </div>
         </div>
     );

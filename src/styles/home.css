@@ -355,6 +355,22 @@
 .fp-first { flex: 1; min-width: 140px; margin-left: 4px; color: var(--ink-2); font-size: 13px; }
 .fp-note { margin-top: 16px; color: var(--ink-3); font-size: 13px; text-align: center; }
 
+/* Changing the name: the old posts fade out, the card eases to its new height, the new posts rise in one after another */
+.fp-stage { transition: height 0.38s cubic-bezier(0.2, 0.7, 0.2, 1); overflow: hidden; }
+.fp-inner { transition: opacity 0.16s ease, transform 0.16s ease; }
+.fp-inner.out { opacity: 0; transform: translateY(-4px); }
+.fp-inner.in .fp-post { animation: fp-rise 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: calc(var(--i) * 90ms); }
+.fp-inner.in .fp-badges img { animation: fp-pop 0.3s ease-out both; animation-delay: calc(var(--i) * 90ms + 180ms); }
+.fp-inner.in .fp-day span { animation: fp-fade 0.3s ease both; }
+.fp-av { transition: background-color 0.3s ease; }
+@keyframes fp-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes fp-pop { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: none; } }
+@keyframes fp-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .fp-stage, .fp-inner { transition: none; }
+  .fp-inner.in .fp-post, .fp-inner.in .fp-badges img, .fp-inner.in .fp-day span { animation: none; }
+}
+
 /* The hero's line about RetroAchievements */
 .hv-b-note { max-width: 62ch; margin: 22px auto 0; text-align: center; color: var(--ink-3); font-size: 15px; line-height: 1.55; }
 .hv-b-note a { color: var(--ink-2); }
