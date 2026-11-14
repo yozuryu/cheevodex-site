@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 
 export type Part = {
     id: string; name: string; holds: string; text: string;
-    desk?: { src: string; alt: string }; phone?: { src: string; alt: string };
+    desk?: { src: string; alt: string }; phone?: { src: string; alt: string; pos?: string };   // pos: which part of the screen the phone card shows
 };
 
 export default function Contents({ parts }: { parts: Part[] }) {
@@ -56,7 +56,7 @@ export default function Contents({ parts }: { parts: Part[] }) {
                     <li key={x.id}>
                         <b>{x.name}</b>
                         <span>{x.text}</span>
-                        {(x.phone || x.desk) && <img src={(x.phone || x.desk)!.src} alt={(x.phone || x.desk)!.alt} loading="lazy" className={x.phone ? 'is-phone' : 'is-desk'} />}
+                        {(x.phone || x.desk) && <img src={(x.phone || x.desk)!.src} alt={(x.phone || x.desk)!.alt} loading="lazy" className={x.phone ? 'is-phone' : 'is-desk'} style={x.phone?.pos ? { objectPosition: x.phone.pos } : undefined} />}
                     </li>
                 ))}
             </ul>

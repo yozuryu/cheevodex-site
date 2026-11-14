@@ -50,8 +50,8 @@ const parts: Part[] = [
       desk: { src: await web(dGame, 1440), alt: 'A game page on desktop with its dex record and achievement list' }, phone: { src: await web(game, 390), alt: 'A game page on a phone' } },
     { id: 'activity', name: 'Activity', holds: 'runs, day by day', text: 'The dexes that moved in the last fortnight, then every run of unlocks, day by day, with a year of streaks and a heatmap.',
       desk: { src: await web(dActivity, 1440), alt: 'Activity on desktop: the dexes that moved, the year and recent runs' }, phone: { src: await web(activity, 390), alt: 'Activity on a phone' } },
-    { id: 'backlog', name: 'Backlog', holds: 'your want-to-play list', text: 'Your RetroAchievements want-to-play list as a watchlist, subsets stacked under their game, progress as rings.',
-      phone: { src: await web(backlog, 390), alt: 'The backlog watchlist on a phone' } },
+    { id: 'backlog', name: 'Backlog', holds: 'your want-to-play list', text: 'Your want-to-play list as an index: the games you have started up next, then every game by console under A to Z, lit up once you start it.',
+      phone: { src: await web(backlog, 390), alt: 'The backlog on a phone: up next as dex cards, then an index of games by console', pos: '50% 100%' } },
     { id: 'stats', name: 'Stats', holds: 'a year in charts', text: 'Streaks and pace as index lines, points across the year, masteries by month, consoles and how rare your unlocks are.',
       desk: { src: await web(dStats, 1440), alt: 'Stats on desktop: streaks, point acquisition, masteries, consoles and rarity' } },
     { id: 'overview', name: 'Overview', holds: 'the profile at a glance', text: 'Last played, recent unlocks, your stats and every award, with the latest mastery on top.',
@@ -75,7 +75,7 @@ const jsonLd = [faqLd, {
     license: 'https://opensource.org/licenses/MIT',
     isAccessibleForFree: true,
     sameAs: [REPO],
-    featureList: ['Every played game as a numbered dex entry', 'Completion rings and progression paths', 'Activity with streaks and a heatmap', 'Friends timeline', 'Backlog watchlist', 'Installs as a phone app'],
+    featureList: ['Every played game as a numbered dex entry', 'Completion rings and progression paths', 'Activity with streaks and a heatmap', 'Friends timeline', 'Backlog as an index by console', 'Installs as a phone app'],
 }];
 ---
 <Base title="Cheevodex: a pocket companion for RetroAchievements" {description} {jsonLd}>
