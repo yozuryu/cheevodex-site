@@ -1,4 +1,4 @@
-// "The dexes that moved", as Activity shows it: the ring holds what you had before the fortnight (dim) and
+// "The dex entries that moved", as Activity shows it: the ring holds what you had before the fortnight (dim) and
 // fills with what you gained (bright) while the +N counts up.
 import { useEffect, useRef, useState } from 'react';
 
