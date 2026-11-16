@@ -65,6 +65,7 @@ export default function RecordTour({ records }: { records: Rec[] }) {
             <div className="rec-pick" role="radiogroup" aria-label="Kind of record">
                 {records.map((x, k) => (
                     <button key={x.state} type="button" role="radio" aria-checked={sel === k} className={`rec-chip s-${x.state} ${sel === k ? 'on' : ''}`} onClick={() => setSel(k)}>
+                        <span className={`ring ${x.state === 'mastered' ? 'full' : ''}`} aria-hidden="true" style={{ ['--s' as string]: '36px', ['--w' as string]: '4px', ['--p' as string]: x.got / x.total * 100, ['--c' as string]: STATES[x.state].color }} />
                         {STATES[x.state].label}
                     </button>
                 ))}

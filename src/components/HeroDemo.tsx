@@ -37,12 +37,10 @@ export default function HeroDemo({ entries, mark }: { entries: Entry[]; mark: st
     const path = e.path;
     return (
         <div className={`demo-app ${auto && !still ? 'touring' : ''} ${held ? 'held' : ''}`} onPointerEnter={() => setHeld(true)} onPointerLeave={() => setHeld(false)}>
-          <div className="demo-bar" aria-hidden="true">
-            <span className="demo-brand"><img src={mark} alt="" width="18" height="18" /><span>Cheevo<b>dex</b></span></span>
-            <span className="demo-tabs"><span className="on">Dex</span><span>Overview</span><span>Activity</span><span className="wide">Backlog</span></span>
-          </div>
-          <div className="demo-search" aria-hidden="true">Search the dex or a No.</div>
+          <span className="codex-ribbon" aria-hidden="true" />
           <div className="demo">
+            <div className="codex-l">
+            <div className="page-h" aria-hidden="true"><span className="page-brand"><img src={mark} alt="" width="16" height="16" />The Dex</span><span>{cur + 1} of {entries.length}</span></div>
             <ul className="demo-list" role="listbox" aria-label="Dex entries" aria-activedescendant={`de-${e.no}`}>
                 {entries.map((x, k) => {
                     const s = STATE[x.state];
@@ -65,6 +63,7 @@ export default function HeroDemo({ entries, mark }: { entries: Entry[]; mark: st
                     );
                 })}
             </ul>
+            </div>
             <div className={`demo-rec s-${e.state}`} key={e.no} aria-live="polite">
                 <div className="demo-rec-top">
                     <span className="dexno">Dex No.{e.no}</span>

@@ -8,6 +8,7 @@ import examples from '../lib/examples.json';
 import setsData from '../lib/sets.json';
 import Contents, { type Part } from '../components/Contents';
 import MovedRow from '../components/MovedRow';
+import DexFigure, { type Spot } from '../components/DexFigure';
 import { APP, REPO, RA, RA_KEYS } from '../lib/site';
 import '../styles/home.css';
 
@@ -23,6 +24,7 @@ import overview from '../assets/shots/overview.png';
 import stats from '../assets/shots/stats.png';
 import dBacklog from '../assets/shots/d-backlog.png';
 import dOverview from '../assets/shots/d-overview.png';
+import year from '../assets/shots/year.png';
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 // Game icons and the author's avatar, shown only inside previews of the app
@@ -62,6 +64,16 @@ const parts: Part[] = [
       desk: { src: await web(dOverview, 1440), alt: 'The profile overview on desktop: last played, recent unlocks and game awards' }, phone: { src: await web(overview, 390), alt: 'The profile overview on a phone' } },
 ];
 
+// Marks on the real Dex screenshots, in screenshot pixels (1440 x 900 and 390 x 844), and each loupe's zoom
+const spots: Spot[] = [
+    { key: 'no', name: 'The number.', text: "Each entry carries its game's RetroAchievements ID, the same for everyone.", desk: [446, 244, 56, 18, 5], phone: [20, 552, 46, 18, 1] },
+    { key: 'ring', name: 'The ring.', text: 'How much of the set is yours: blue in progress, silver once beaten, gold when mastered.', desk: [1266, 713, 60, 20, 5], phone: [74, 708, 60, 22, 1] },
+    { key: 'filters', name: 'The filters.', text: 'Search by name or number, filter to what is not beaten yet, or sort by console.', desk: [444, 165, 357, 33, 3], phone: [16, 470, 358, 37, 1] },
+    { key: 'counts', name: 'The counts.', text: 'Played, beaten and mastered, kept beside the profile.', desk: [112, 377, 300, 55, 3.6], phone: [16, 208, 358, 57, 1] },
+];
+const dexDesk = { src: await web(dDex, 1440), full: await web(dDex, 2880), w: 1440, h: 900, alt: 'The Dex on desktop: every played game as a numbered entry beside the profile rail' };
+const dexPhone = { src: await web(dex, 780), full: await web(dex, 780), w: 390, h: 844, alt: 'The Dex on a phone: the counts, the filters and the first entries' };
+
 const description = 'Cheevodex is a free, open-source companion for RetroAchievements: every game you have played as a numbered dex entry, with completion rings, activity, friends and your backlog. Runs in your browser; your API key never leaves it.';
 const faqLd = {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is RetroAchievements?", "acceptedAnswer": {"@type": "Answer", "text": "A free community that adds achievements, leaderboards and mastery to classic console and handheld games, played on emulators such as RetroArch. Cheevodex is a companion for an account there."}}, {"@type": "Question", "name": "Is Cheevodex official?", "acceptedAnswer": {"@type": "Answer", "text": "No. It is an independent, open-source app that reads RetroAchievements' public web API. It is not affiliated with RetroAchievements."}}, {"@type": "Question", "name": "Is my API key safe?", "acceptedAnswer": {"@type": "Answer", "text": "Your key is saved in your browser on your own device and sent only to RetroAchievements. Cheevodex has no server and no account of its own, and the code is on GitHub to check."}}, {"@type": "Question", "name": "What does it cost?", "acceptedAnswer": {"@type": "Answer", "text": "Nothing. It is free and open source under the MIT licence."}}, {"@type": "Question", "name": "Which consoles does it cover?", "acceptedAnswer": {"@type": "Answer", "text": "Every system RetroAchievements supports, from the Atari 2600 to the Wii."}}, {"@type": "Question", "name": "Can I see a friend's dex?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Open any RetroAchievements username in Cheevodex to read their dex, recent games and progress."}}, {"@type": "Question", "name": "Can I install it?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Open it in your browser and choose Install or Add to Home Screen. It opens full screen like an app, on phones and computers."}}]};
 const jsonLd = [faqLd, {
@@ -94,15 +106,7 @@ const jsonLd = [faqLd, {
                 <h2>The Dex.</h2>
                 <p class="big">Every game you have touched on RetroAchievements gets an entry and a number: its RA game ID. Is it a list? Technically. It is a dex.</p>
             </div>
-            <figure class="screen reveal">
-                <Image class="shot screen-shot" src={dDex} alt="The Dex on desktop: every played game as a numbered entry beside the profile rail" widths={[900, 1400, 2000]} sizes="(max-width: 1180px) 94vw, 1116px" />
-                <dl class="screen-panel">
-                    <div><dt>Played</dt><dd>96</dd></div>
-                    <div><dt>Beaten</dt><dd>8</dd></div>
-                    <div><dt>Mastered</dt><dd>2</dd></div>
-                    <figcaption>Search by name or number, filter to what is not beaten yet, or sort by console.</figcaption>
-                </dl>
-            </figure>
+            <div class="reveal"><DexFigure client:visible desk={dexDesk} phone={dexPhone} spots={spots} crop={[170, 620]} /></div>
         </div>
     </section>
 
@@ -126,6 +130,10 @@ const jsonLd = [faqLd, {
                 <p>Then every run of unlocks, day by day, a year of streaks, and the heatmap. Mostly so you can see which game ate your fortnight.</p>
             </div>
             <div class="recap-card reveal"><MovedRow client:visible rows={moved} /></div>
+            <figure class="year reveal">
+                <div class="year-scroll"><Image class="shot" src={year} alt="The past year in Activity: unlocks, points and best day, the streaks, and the heatmap" widths={[900, 1400, 1768]} sizes="(max-width: 760px) 760px, (max-width: 1180px) 94vw, 1116px" /></div>
+                <figcaption>The year, the streaks and the heatmap, as Activity shows them.</figcaption>
+            </figure>
         </div>
     </section>
 
