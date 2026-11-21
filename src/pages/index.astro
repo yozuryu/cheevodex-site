@@ -77,7 +77,7 @@ const dexDesk = { src: await web(dDex, 1440), full: await web(dDex, 2880), w: 14
 const dexPhone = { src: await web(dex, 780), full: await web(dex, 780), w: 390, h: 844, alt: 'The Dex on a phone: the counts, the filters and the first entries' };
 
 const description = 'Cheevodex is a free, open-source companion for RetroAchievements: every game you have played as a numbered dex entry, with completion rings, activity, friends and your backlog. Runs in your browser; your API key never leaves it.';
-const faqLd = {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is RetroAchievements?", "acceptedAnswer": {"@type": "Answer", "text": "A free community that adds achievements, leaderboards and mastery to classic console and handheld games, played on emulators such as RetroArch. Cheevodex is a companion for an account there."}}, {"@type": "Question", "name": "Is Cheevodex official?", "acceptedAnswer": {"@type": "Answer", "text": "No. It is an independent, open-source app that reads RetroAchievements' public web API. It is not affiliated with RetroAchievements."}}, {"@type": "Question", "name": "Is my API key safe?", "acceptedAnswer": {"@type": "Answer", "text": "Your key is saved in your browser on your own device and sent only to RetroAchievements. Cheevodex has no server and no account of its own, and the code is on GitHub to check."}}, {"@type": "Question", "name": "What does it cost?", "acceptedAnswer": {"@type": "Answer", "text": "Nothing. It is free and open source under the MIT licence."}}, {"@type": "Question", "name": "Which consoles does it cover?", "acceptedAnswer": {"@type": "Answer", "text": "Every system RetroAchievements supports, from the Atari 2600 to the Wii."}}, {"@type": "Question", "name": "Can I see a friend's dex?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Open any RetroAchievements username in Cheevodex to read their dex, recent games and progress."}}, {"@type": "Question", "name": "How do I find a game or a friend?", "acceptedAnswer": {"@type": "Answer", "text": "Search from anywhere: the button in the middle of the bar on a phone, or ⌘K, Ctrl+K or / on a computer. It searches games, players and pages that Cheevodex has already loaded, forgives typos, and a number opens that dex entry."}}, {"@type": "Question", "name": "Can I install it?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Open it in your browser and choose Install or Add to Home Screen. It opens full screen like an app, on phones and computers."}}]};
+const faqLd = {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is RetroAchievements?", "acceptedAnswer": {"@type": "Answer", "text": "A free community that adds achievements, leaderboards and mastery to classic console and handheld games, played on emulators such as RetroArch. Cheevodex is a companion for an account there."}}, {"@type": "Question", "name": "Is Cheevodex official?", "acceptedAnswer": {"@type": "Answer", "text": "No. It is an independent, open-source app that reads RetroAchievements' public web API. It is not affiliated with RetroAchievements."}}, {"@type": "Question", "name": "Is my API key safe?", "acceptedAnswer": {"@type": "Answer", "text": "Your key is saved in your browser on your own device and sent only to RetroAchievements. Cheevodex has no server and no account of its own, and the code is on GitHub to check."}}, {"@type": "Question", "name": "What does it cost?", "acceptedAnswer": {"@type": "Answer", "text": "Nothing. It is free and open source under the MIT licence."}}, {"@type": "Question", "name": "Which consoles does it cover?", "acceptedAnswer": {"@type": "Answer", "text": "Every system RetroAchievements supports, from the Atari 2600 to the Wii."}}, {"@type": "Question", "name": "Can I see a friend's dex?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Open any RetroAchievements username in Cheevodex to read their dex, recent games and progress."}}, {"@type": "Question", "name": "How do I find a game or a friend?", "acceptedAnswer": {"@type": "Answer", "text": "Search from anywhere: the button in the middle of the bar on a phone, or ⌘K, Ctrl+K or / on a computer. It searches games, players, consoles and pages that Cheevodex has already loaded, forgives typos, knows short console names like ps2, and a number opens that dex entry. You can swipe away recent searches you no longer need."}}, {"@type": "Question", "name": "Can I install it?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Open it in your browser and choose Install or Add to Home Screen, or use Install the app in Cheevodex's own menu when your browser offers it. It opens full screen like an app, on phones and computers."}}]};
 const jsonLd = [faqLd, {
     '@type': 'WebApplication',
     name: 'Cheevodex',
@@ -93,7 +93,7 @@ const jsonLd = [faqLd, {
     license: 'https://opensource.org/licenses/MIT',
     isAccessibleForFree: true,
     sameAs: [REPO],
-    featureList: ['Every played game as a numbered dex entry', 'Completion rings and progression paths', 'Activity with streaks and a heatmap', 'Friends timeline and side-by-side compare', 'Backlog as an index by console', 'Search across games, players and pages (⌘K / Ctrl+K)', 'Installs as a phone app'],
+    featureList: ['Every played game as a numbered dex entry', 'Completion rings and progression paths', 'Activity with streaks and a heatmap', 'Friends timeline and a you-vs-them compare', 'Backlog as an index by console', 'Search across games, players, consoles and pages (⌘K / Ctrl+K)', 'Installs as a phone app'],
 }];
 ---
 <Base title="Cheevodex: a pocket companion for RetroAchievements" {description} {jsonLd}>
@@ -149,7 +149,7 @@ const jsonLd = [faqLd, {
                     <div class="row"><dt>Who played</dt><i></i><dd>newest first</dd></div>
                     <div class="row"><dt>What they unlocked</dt><i></i><dd>game by game</dd></div>
                     <div class="row"><dt>Their colour</dt><i></i><dd>from their name</dd></div>
-                    <div class="row"><dt>Any shared game</dt><i></i><dd>side by side</dd></div>
+                    <div class="row"><dt>Compare</dt><i></i><dd>you vs them, ring by ring</dd></div>
                 </dl>
                 <p>Type any name to see their evening.</p>
             </div>
@@ -162,11 +162,11 @@ const jsonLd = [faqLd, {
         <div class="wrap search">
             <div class="search-copy reveal">
                 <h2>The Search.</h2>
-                <p class="big">One search for every game, player and page you have loaded. Spelled it wrong? It still knows.</p>
+                <p class="big">One search for every game, player, console and page you have loaded. Spelled it wrong? It still knows.</p>
                 <dl class="ledger search-list">
                     <div class="row"><dt>A typo</dt><i></i><dd>forgiven</dd></div>
                     <div class="row"><dt>Initials</dt><i></i><dd>ff, kh, smt</dd></div>
-                    <div class="row"><dt>A number</dt><i></i><dd>opens that entry</dd></div>
+                    <div class="row"><dt>A console</dt><i></i><dd>ps2, gba, snes</dd></div>
                     <div class="row"><dt>From any page</dt><i></i><dd>⌘K, Ctrl+K or /</dd></div>
                 </dl>
                 <p>On a phone it is the round button in the middle of the bar. It looks through what Cheevodex has already loaded, so it answers at once, even offline.</p>
@@ -241,11 +241,11 @@ const jsonLd = [faqLd, {
                 </details>
                 <details class="faq-item">
                     <summary>How do I find a game or a friend?</summary>
-                    <p>Search from anywhere: the button in the middle of the bar on a phone, or ⌘K, Ctrl+K or / on a computer. It searches games, players and pages that Cheevodex has already loaded, forgives typos, and a number opens that dex entry.</p>
+                    <p>Search from anywhere: the button in the middle of the bar on a phone, or ⌘K, Ctrl+K or / on a computer. It searches games, players, consoles and pages that Cheevodex has already loaded, forgives typos, knows short console names like ps2, and a number opens that dex entry. You can swipe away recent searches you no longer need.</p>
                 </details>
                 <details class="faq-item">
                     <summary>Can I install it?</summary>
-                    <p>Yes. Open it in your browser and choose Install or Add to Home Screen. It opens full screen like an app, on phones and computers.</p>
+                    <p>Yes. Open it in your browser and choose Install or Add to Home Screen, or use Install the app in Cheevodex's own menu when your browser offers it. It opens full screen like an app, on phones and computers.</p>
                 </details>
             </div>
         </div>

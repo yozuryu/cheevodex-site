@@ -545,8 +545,8 @@ h1, h2, h3, .faq-item summary, .dexfig-legend b, .loupe-cap b, .callouts button 
 .sd-row.on { background: var(--box-hi); }
 .sd-row.on::before { content: ''; position: absolute; left: 0; top: 9px; bottom: 9px; width: 2px; border-radius: 2px; background: var(--accent); }
 .sd-icon { width: 36px; height: 36px; flex-shrink: 0; border-radius: 3px; object-fit: cover; image-rendering: pixelated; background: var(--well); border: 1px solid #0a0a0a; }
-.sd-letter { display: grid; place-items: center; color: hsl(var(--h) 60% 72%); background: hsl(var(--h) 30% 16%); border-color: hsl(var(--h) 30% 24%); font: 700 15px var(--body); image-rendering: auto; }
 .sd-av { display: grid; place-items: center; border-radius: 50%; border: 0; background: var(--fc); color: var(--page); font: 600 16px var(--display); }
+.sd-console { object-fit: contain; padding: 5px; image-rendering: auto; background: var(--well); }
 .sd-tile { display: grid; place-items: center; color: var(--accent); background: var(--box-hi); border-color: var(--line); font: 600 18px var(--display); }
 .sd-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
 .sd-t { font-size: 14px; font-weight: 600; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

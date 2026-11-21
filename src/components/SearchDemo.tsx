@@ -1,16 +1,19 @@
 // The search in miniature: the app's command palette over a small catalog of real RetroAchievements games
-// (src/lib/search-demo.json) and a few made-up players. The matcher is a copy of the app's (assets/match.js
+// (src/lib/search-demo.json, their RA icons in public/app-icons/search/g/{no}.webp, the consoles' in .../c/) and a
+// few made-up players (letter avatars: no real person's picture on an invented name). The matcher is a copy of the app's (assets/match.js
 // in the cheevodex repo): every typed word matches a word of the name from its start, inside it, or within a
-// typo (one from 4 letters, two from 7); initials work; a number is a Dex No. Keep the two in step.
+// typo (one from 4 letters, two from 7); initials work; a number is a Dex No.; consoles answer to short names
+// (ps2, gba) as in the app's CONSOLE_ALIASES. Keep the two in step.
 // It types "legnd of zelda" by itself the first time it comes into view; the chips try other queries.
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { friendColor } from './FriendColor';
 
-type Game = { no: number; title: string; console: string; icon?: string };
+type Game = { no: number; title: string; console: string };
 type Item = { ws: string[]; ini: string };
 type Row =
     | { kind: 'game'; key: string; g: Game }
     | { kind: 'player'; key: string; name: string }
+    | { kind: 'console'; key: string; name: string; n: number }
     | { kind: 'page'; key: string; label: string; hint: string };
 
 const norm = (t: string) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
@@ -62,21 +65,34 @@ function match(qs: string[], ini: string | null, it: Item, typos: boolean): [num
     return [total / qs.length + Math.max(0, it.ws.length - qs.length) * 0.03, typo];
 }
 
-// A console's tint for the letter tiles of games without a local icon (one hue per console name)
-const hueOf = (s: string) => { let h = 0; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h % 360; };
 
 const PAGES = [
-    { label: 'Profile', hint: 'Your dex' }, { label: 'Social', hint: "Friends' unlocks, following" },
-    { label: 'Consoles', hint: 'Every console and its games' }, { label: 'Changelog', hint: 'What changed in each edition' },
+    { label: 'Profile', hint: 'Your dex' }, { label: 'Social', hint: "Friends' activity, following" },
+    { label: 'Consoles', hint: 'Every console and its games, searched together' }, { label: 'Changelog', hint: 'What changed in each edition' },
 ];
+// The short names people type for a console (the app keys these by RA console id)
+// Each console's RetroAchievements icon, saved in public/app-icons/search/c/ (48px WebP)
+const CONSOLE_ICON: Record<string, string> = {
+    'PlayStation': 'ps1', 'PlayStation 2': 'ps2', 'PlayStation Portable': 'psp', 'SNES/Super Famicom': 'snes', 'NES/Famicom': 'nes',
+    'Game Boy': 'gb', 'Game Boy Color': 'gbc', 'Game Boy Advance': 'gba', 'Nintendo DS': 'ds', 'Nintendo 3DS': '3ds', 'Nintendo 64': 'n64',
+    'GameCube': 'gc', 'Wii': 'wii',
+};
+const CONSOLE_ALIASES: Record<string, string> = {
+    'PlayStation': 'ps1 psx ps', 'PlayStation 2': 'ps2', 'PlayStation Portable': 'psp', 'SNES/Super Famicom': 'snes sfc', 'NES/Famicom': 'nes fc',
+    'Game Boy': 'gb', 'Game Boy Color': 'gbc', 'Game Boy Advance': 'gba', 'Nintendo DS': 'nds ds', 'Nintendo 3DS': '3ds', 'Nintendo 64': 'n64',
+    'GameCube': 'gc ngc gcn', 'Wii': 'wii',
+};
 // Typed first: a typo that lands on a game with its icon; the chips show the other tricks
-const TRY = ['legnd of zelda', 'ff', 'kirbi', 'ocarnia of time', 'retro', '10113'];
+const TRY = ['legnd of zelda', 'ff', 'kirbi', 'ps2', 'retro', '10113'];
 
 export default function SearchDemo({ games, players, iconBase }: { games: Game[]; players: string[]; iconBase: string }) {
     const lists = useMemo(() => ({
         games: games.map(g => withIni({ g, ws: words(g.title) })),
         players: players.map(name => withIni({ name, ws: words(name.replace(/([a-z])([A-Z0-9])/g, '$1 $2')).concat(words(name)) })),
         pages: PAGES.map(p => withIni({ ...p, ws: words(`${p.label} ${p.hint}`) })),
+        consoles: Object.entries(games.reduce<Record<string, number>>((m, g) => { m[g.console] = (m[g.console] || 0) + 1; return m; }, {}))
+            .filter(([name]) => CONSOLE_ALIASES[name])
+            .map(([name, n]) => withIni({ name, n, ws: words(`${name} ${CONSOLE_ALIASES[name]}`) })),
     }), [games, players]);
     const [q, setQ] = useState('');
     const [active, setActive] = useState(0);
@@ -113,9 +129,10 @@ export default function SearchDemo({ games, players, iconBase }: { games: Game[]
             games: lists.games.map(it => ({ it, m: match(qs, ini, it, typos) })).filter(r => r.m),
             players: lists.players.map(it => ({ it, m: match(qs, ini, it, typos) })).filter(r => r.m),
             pages: lists.pages.map(it => ({ it, m: match(qs, ini, it, typos) })).filter(r => r.m),
+            consoles: lists.consoles.map(it => ({ it, m: match(qs, ini, it, typos) })).filter(r => r.m),
         });
         let all = run(false);
-        if (!all.games.length && !all.players.length && !all.pages.length) all = run(true);
+        if (!all.games.length && !all.players.length && !all.pages.length && !all.consoles.length) all = run(true);
         const by = (a: { m: [number, boolean] | null }, b: { m: [number, boolean] | null }) => a.m![0] - b.m![0];
         const out: { label: string; best: number; rows: Row[] }[] = [];
         const num = query.match(/^(?:no\.?\s*)?(\d{1,6})$/i);
@@ -123,11 +140,10 @@ export default function SearchDemo({ games, players, iconBase }: { games: Game[]
             const g = games.find(x => x.no === Number(num[1]));
             if (g) out.push({ label: 'Dex No.', best: -1, rows: [{ kind: 'game', key: `n${g.no}`, g }] });
         }
-        // games with art get a small lift (demo only: in the app every game has its icon)
-        const lift = (r: { it: { g: Game }; m: [number, boolean] | null }) => r.m![0] - (r.it.g.icon ? 0.12 : 0);
-        const gs = all.games.sort((a, b) => lift(a) - lift(b) || a.it.g.title.length - b.it.g.title.length).slice(0, 6);
-        const ps = all.players.sort(by).slice(0, 3), pg = all.pages.sort(by).slice(0, 2);
+        const gs = all.games.sort((a, b) => a.m![0] - b.m![0] || a.it.g.title.length - b.it.g.title.length).slice(0, 6);
+        const ps = all.players.sort(by).slice(0, 3), pg = all.pages.sort(by).slice(0, 2), cs = all.consoles.sort(by).slice(0, 3);
         if (gs.length) out.push({ label: 'Games', best: gs[0].m![0], rows: gs.map(r => ({ kind: 'game', key: `g${r.it.g.no}`, g: r.it.g }) as Row) });
+        if (cs.length) out.push({ label: 'Consoles', best: cs[0].m![0] - 0.01, rows: cs.map(r => ({ kind: 'console', key: `c${r.it.name}`, name: r.it.name, n: r.it.n }) as Row) });
         if (ps.length) out.push({ label: 'Players', best: ps[0].m![0], rows: ps.map(r => ({ kind: 'player', key: r.it.name, name: r.it.name }) as Row) });
         if (pg.length) out.push({ label: 'Go to', best: pg[0].m![0] + 0.02, rows: pg.map(r => ({ kind: 'page', key: r.it.label, label: r.it.label, hint: r.it.hint }) as Row) });
         return out.sort((a, b) => a.best - b.best);
@@ -145,9 +161,11 @@ export default function SearchDemo({ games, players, iconBase }: { games: Game[]
         return (
             <div key={r.key} className={`sd-row ${idx === active ? 'on' : ''}`} onMouseMove={() => setActive(idx)} role="option" aria-selected={idx === active}>
                 {r.kind === 'game' ? (<>
-                    {r.g.icon ? <img src={iconBase + r.g.icon + '.png'} alt="" className="sd-icon" loading="lazy" />
-                        : <span className="sd-icon sd-letter" style={{ ['--h' as string]: hueOf(r.g.console) }}>{r.g.title.replace(/^the /i, '')[0]}</span>}
+                    <img src={`${iconBase}search/g/${r.g.no}.webp`} alt="" className="sd-icon" loading="lazy" width={36} height={36} />
                     <span className="sd-main"><span className="sd-t">{r.g.title}</span><span className="sd-s"><span className="sd-no">No.{r.g.no}</span>{r.g.console}</span></span>
+                </>) : r.kind === 'console' ? (<>
+                    <img src={`${iconBase}search/c/${CONSOLE_ICON[r.name]}.webp`} alt="" className="sd-icon sd-console" loading="lazy" width={36} height={36} />
+                    <span className="sd-main"><span className="sd-t">{r.name}</span><span className="sd-s">{r.n} games saved</span></span>
                 </>) : r.kind === 'player' ? (<>
                     <span className="sd-icon sd-av" style={{ ['--fc' as string]: friendColor(r.name) }}>{r.name[0]}</span>
                     <span className="sd-main"><span className="sd-t sd-gold">{r.name}</span><span className="sd-s">Following</span></span>
@@ -165,7 +183,7 @@ export default function SearchDemo({ games, players, iconBase }: { games: Game[]
                 <label className={`sd-bar ${typing ? 'busy' : ''}`}>
                     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
                     <input ref={inputRef} value={q} onChange={e => { window.clearInterval(timer.current); setTyping(false); setQ(e.target.value); }} onKeyDown={onKey}
-                        placeholder="Search games, players and pages" aria-label="Search games, players and pages" spellCheck={false} autoComplete="off" />
+                        placeholder="Search games, players, consoles and pages" aria-label="Search games, players, consoles and pages" spellCheck={false} autoComplete="off" />
                     <kbd>⌘K</kbd>
                 </label>
                 <div className="sd-list" role="listbox">
