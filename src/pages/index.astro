@@ -167,13 +167,30 @@ const jsonLd = [faqLd, {
                     <div class="row"><dt>A typo</dt><i></i><dd>forgiven</dd></div>
                     <div class="row"><dt>Initials</dt><i></i><dd>ff, kh, smt</dd></div>
                     <div class="row"><dt>A console</dt><i></i><dd>ps2, gba, snes</dd></div>
+                    <div class="row"><dt>Filters</dt><i></i><dd>games, players, consoles</dd></div>
                     <div class="row"><dt>From any page</dt><i></i><dd>⌘K, Ctrl+K or /</dd></div>
                 </dl>
                 <p>On a phone it is the blue tile in the corner of the bar, and the field sits right above your keyboard. Before you type, it offers the games you were just playing. It looks through what Cheevodex has already loaded, so it answers at once, even offline.</p>
             </div>
             <div class="reveal"><SearchDemo client:visible games={searchDemo.games} players={searchDemo.players} iconBase={base + 'app-icons/'} /></div>
+            <!-- The search on a phone and a computer: loaded once it scrolls into view, muted, playing only while on screen -->
+            <figure class="search-film reveal">
+                <video id="search-film" muted loop playsinline controls preload="none" poster={base + 'video/search-poster.jpg'} data-src={base + 'video/search.mp4'}
+                    aria-label="The Cheevodex search on a phone and on a computer"></video>
+                <figcaption>Every search feature on a phone and a computer, 1 min 28 s.</figcaption>
+            </figure>
         </div>
     </section>
+    <script>
+        const film = document.getElementById('search-film') as HTMLVideoElement | null;
+        if (film) {
+            const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+            new IntersectionObserver(([e]) => {
+                if (e.isIntersecting) { if (!film.src) film.src = film.dataset.src || ''; if (!calm) film.play().catch(() => {}); }
+                else film.pause();
+            }, { threshold: 0.35 }).observe(film);
+        }
+    </script>
     <!-- The Contents: a contents page across the spread -->
     <section class="band b-panel" id="contents">
         <div class="wrap">
