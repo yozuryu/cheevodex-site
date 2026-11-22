@@ -45,7 +45,16 @@ function tokenScore(t: string, ws: string[], typos: boolean): number | null {
         if (w.startsWith(t)) best = 0.1;
         else if (best == null && t.length >= 3 && w.includes(t)) best = 0.4;
     }
+    if (best != null) return best;
+    // a word typed without its spaces ("megaman", "supermario"): the name's neighbouring words run together
+    const joined: string[] = [];
+    if (t.length >= 4) for (let i = 0; i < ws.length - 1; i++) { const two = ws[i] + ws[i + 1]; joined.push(two); if (i < ws.length - 2) joined.push(two + ws[i + 2]); }
+    for (const j of joined) {
+        if (j === t) return 0.05;
+        if (j.startsWith(t) && t.length > j.length - ws[ws.length - 1].length) best = best == null ? 0.15 : Math.min(best, 0.15);
+    }
     if (best != null || !typos) return best;
+    ws = ws.concat(joined);
     const allow = /^\d+$/.test(t) ? 0 : t.length >= 7 ? 2 : t.length >= 4 ? 1 : 0;
     if (!allow) return null;
     for (const w of ws) {
